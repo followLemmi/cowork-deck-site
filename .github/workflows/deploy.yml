@@ -3,11 +3,6 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  # The build and the SEO gate run on every pull request as well, and the
-  # ruleset on main requires them to pass. A broken canonical, a duplicated
-  # description or a 2 MB screenshot cannot be merged.
-  pull_request:
-    branches: [main]
   # The changelog and the download links are baked in at build time, so a new
   # release in the application repository has to trigger a rebuild here. Two
   # ways in: a nightly run that needs nobody, and a manual one for when you do
@@ -31,7 +26,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  # Named for what it produces rather than `build`, which is ci.yml's job name
+  # and the context the ruleset requires. Two checks called `build` would be a
+  # coin toss over which one satisfied the rule.
+  bundle:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -63,7 +61,7 @@ jobs:
           path: dist
 
   deploy:
-    needs: build
+    needs: bundle
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
