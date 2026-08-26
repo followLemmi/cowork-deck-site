@@ -1,50 +1,81 @@
 ---
 import Base from '../../layouts/Base.astro'
 import { FEATURES } from '../../data/features'
+import { SITE } from '../../data/site'
 import { breadcrumbs } from '../../data/schema'
+
+/* One screenshot at the top and six rows under it, rather than six cards. Six
+   cards say "these are six of the same thing", and they are not: they are six
+   different answers to six different questions. */
+const shot = FEATURES.find((f) => f.slug === 'multiple-claude-code-sessions')!
 ---
 
 <Base
   title="Features"
   description="What cowork-deck does that a window full of terminals does not: live session state, an account per workspace, boards that launch sessions, and schedules."
+  image={shot.og}
+  imageAlt={shot.imageAlt}
   schema={breadcrumbs([
     { name: 'cowork-deck', path: '/' },
     { name: 'Features', path: '/features/' },
   ])}
 >
-  <div class="wrap section">
-    <p class="eyebrow">Features</p>
-    <h1>Everything the deck does</h1>
-    <p class="lede" style="max-width: 56ch">
-      Six capabilities, each one a thing a terminal, a tab strip or a
-      multiplexer cannot do for you — because none of them knows what an agent
-      session is.
-    </p>
-
-    <div class="grid grid--2" style="margin-top: 3rem">
-      {
-        FEATURES.map((f) => (
-          <a class="island card feature-card" href={`/features/${f.slug}/`}>
-            <h2>{f.title}</h2>
-            <p>{f.summary}</p>
-            <span class="feature-card__more">Read more</span>
-          </a>
-        ))
-      }
+  <div class="wrap">
+    <div class="phead">
+      <p class="eyebrow">Features</p>
+      <h1 class="h1--page">Everything the deck does</h1>
+      <p class="lede">
+        Six capabilities, each one a thing a terminal, a tab strip or a
+        multiplexer cannot do for you — because none of them knows what an agent
+        session is.
+      </p>
     </div>
   </div>
+
+  <section class="section" style="padding-top: 0">
+    <div class="wrap">
+      <figure class="shot bleed" style="margin-top: 0">
+        <img
+          src={shot.image}
+          width={shot.width}
+          height={shot.height}
+          alt={shot.imageAlt}
+          fetchpriority="high"
+        />
+        <figcaption>
+          Zoom takes the window; the rest become a filmstrip carrying the four
+          things worth knowing about a session you are not reading right now.
+        </figcaption>
+      </figure>
+
+      <div class="flist" style="margin-top: clamp(2.5rem, 5vw, 3.5rem)">
+        {FEATURES.map((f) => (
+          <a class="fitem" href={`/features/${f.slug}/`}>
+            <div>
+              <h2>{f.title}</h2>
+              <p>{f.summary}</p>
+            </div>
+            <span class="fitem__go">Read →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Nothing to sign up for</p>
+      <h2 style="max-width: 24ch">Point it at a folder and start the first session.</h2>
+      <div class="cta-row" style="margin-top: 2rem">
+        <a class="btn btn--primary" href="/install/">Download for macOS or Linux</a>
+        <a class="btn btn--ghost" href={SITE.repo} rel="noopener">Read the source</a>
+      </div>
+    </div>
+  </section>
 </Base>
 
 <style>
-  .feature-card { display: block; text-decoration: none; }
-  .feature-card h2 { font-size: 1.125rem; margin: 0 0 0.5rem; }
-  .feature-card p { color: var(--fg-mid); font-size: 1rem; margin: 0; }
-  .feature-card:hover { border-color: var(--line-strong); }
-  .feature-card__more {
-    display: inline-block;
-    margin-top: 0.9rem;
-    font-size: 0.9375rem;
-    color: var(--fg-dim);
-  }
-  .feature-card:hover .feature-card__more { color: var(--fg); }
+  /* On this page the row title is an h2, because the page's subject is the set
+     rather than any one of them. The size is the row's, not the heading's. */
+  .fitem h2 { font-size: 1.0625rem; margin: 0 0 0.2rem; letter-spacing: -0.015em; }
 </style>

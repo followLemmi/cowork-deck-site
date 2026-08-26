@@ -1,19 +1,22 @@
 ---
+/* The footer. Three columns that become two on a tablet and one-plus-two on a
+   phone, where the link rows also grow to a 44px touch target — a 34px row is
+   fine under a cursor and a coin-flip under a thumb. */
 import { SITE } from '../data/site'
 const year = new Date().getFullYear()
 ---
 
-<footer class="site-footer">
-  <div class="wrap site-footer__inner">
-    <div>
-      <p class="site-footer__brand">cowork-deck</p>
-      <p class="site-footer__note">
-        {SITE.tagline}. Free and open source under the {SITE.license} licence.
-      </p>
-    </div>
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr__inner">
+      <div class="ftr__about">
+        <p class="ftr__brand">cowork-deck</p>
+        <p class="ftr__note">
+          {SITE.tagline}. Free and open source under the {SITE.license} licence.
+        </p>
+      </div>
 
-    <nav aria-label="Footer">
-      <div>
+      <nav aria-label="Product">
         <h2>Product</h2>
         <ul>
           <li><a href="/features/">Features</a></li>
@@ -21,8 +24,9 @@ const year = new Date().getFullYear()
           <li><a href="/changelog/">Changelog</a></li>
           <li><a href="/faq/">FAQ</a></li>
         </ul>
-      </div>
-      <div>
+      </nav>
+
+      <nav aria-label="Project">
         <h2>Project</h2>
         <ul>
           <li><a href={SITE.repo} rel="noopener">Source on GitHub</a></li>
@@ -30,68 +34,11 @@ const year = new Date().getFullYear()
           <li><a href="/design/">The True Ink design system</a></li>
           <li><a href="/rss.xml">Release feed (RSS)</a></li>
         </ul>
-      </div>
-    </nav>
-  </div>
+      </nav>
+    </div>
 
-  <div class="wrap site-footer__legal">
-    <p>© {year} {SITE.author.name}. Not affiliated with Anthropic.</p>
+    <div class="ftr__legal">
+      <p>© {year} {SITE.author.name}. Not affiliated with Anthropic.</p>
+    </div>
   </div>
 </footer>
-
-<style>
-  .site-footer {
-    border-top: 1px solid var(--line);
-    background: var(--bg-chrome);
-    padding: 3rem 0 2rem;
-    margin-top: 4rem;
-  }
-  .site-footer__inner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2.5rem;
-    justify-content: space-between;
-  }
-  .site-footer__brand {
-    font-family: var(--ff-display);
-    font-weight: 600;
-    margin: 0 0 0.35rem;
-  }
-  .site-footer__note {
-    color: var(--fg-dim);
-    font-size: 0.9375rem;
-    max-width: 30ch;
-    margin: 0;
-  }
-  .site-footer nav {
-    display: flex;
-    gap: 3rem;
-    flex-wrap: wrap;
-  }
-  .site-footer h2 {
-    font-size: 0.8125rem;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--fg-dim);
-    font-weight: 500;
-    margin: 0 0 0.75rem;
-  }
-  .site-footer ul { list-style: none; margin: 0; padding: 0; }
-  .site-footer li { margin-bottom: 0.4rem; }
-  .site-footer li a {
-    font-size: 0.9375rem;
-    color: var(--fg-mid);
-    text-decoration: none;
-  }
-  .site-footer li a:hover { color: var(--fg); text-decoration: underline; }
-  .site-footer__legal {
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--line);
-  }
-  .site-footer__legal p {
-    margin: 0;
-    font-size: 0.875rem;
-    color: var(--fg-dim);
-  }
-</style>

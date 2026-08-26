@@ -70,107 +70,48 @@ const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`
       </ol>
     </nav>
 
-    <article class="release">
-      <header>
-        <h1>cowork-deck {release.tag}</h1>
-        <p class="release__date">
+    <article>
+      <div class="phead phead--crumbed">
+        <p class="eyebrow">
+          Release ·
           <time datetime={release.publishedAt}>{fmt(release.publishedAt)}</time>
           {release.prerelease && <> · pre-release</>}
         </p>
-      </header>
+        <h1 class="h1--page">cowork-deck {release.tag}</h1>
+      </div>
 
       <div class="prose md" set:html={body} />
 
       {
         release.downloads.length > 0 && (
-          <section class="downloads">
-            <h2>Downloads for {release.tag}</h2>
-            <ul>
+          <div class="note">
+            <p class="note__label">Downloads for {release.tag}</p>
+            <ul class="dl">
               {release.downloads.map((d) => (
                 <li>
-                  <a href={d.url} rel="noopener">{d.label}</a>
-                  <span>{mb(d.size)}</span>
+                  <a class="dl__link" href={d.url} rel="noopener">
+                    <span class="dl__label">{d.label}</span>
+                    <span class="dl__meta">{mb(d.size)}</span>
+                  </a>
                 </li>
               ))}
             </ul>
-            <p>
-              On macOS, read <a href="/install/#gatekeeper">the Gatekeeper note</a> first.
+            <p style="margin-bottom: 0">
+              On macOS, read <a href="/install/#gatekeeper">the Gatekeeper note</a>
+              first.
             </p>
-          </section>
+          </div>
         )
       }
 
       <nav class="adjacent" aria-label="Other releases">
-        {newer && <a href={`/changelog/${newer.tag}/`}>← {newer.tag}, which came after</a>}
+        {newer ? (
+          <a href={`/changelog/${newer.tag}/`}>← {newer.tag}, which came after</a>
+        ) : (
+          <span />
+        )}
         {older && <a href={`/changelog/${older.tag}/`}>{older.tag}, which came before →</a>}
       </nav>
     </article>
   </div>
 </Base>
-
-<style>
-  .crumbs { padding: 1.5rem 0 0; }
-  .crumbs ol {
-    display: flex; flex-wrap: wrap; gap: 0.5rem;
-    list-style: none; margin: 0; padding: 0;
-    font-size: 0.875rem; color: var(--fg-dim); max-width: none;
-  }
-  .crumbs li { margin: 0; }
-  .crumbs li + li::before { content: '/'; margin-right: 0.5rem; color: var(--line-strong); }
-  .crumbs a { color: var(--fg-dim); text-decoration: none; }
-  .crumbs a:hover { color: var(--fg); text-decoration: underline; }
-
-  .release { padding: 2rem 0 1rem; }
-  .release__date {
-    font-family: var(--ff-mono);
-    font-size: 0.875rem;
-    color: var(--fg-dim);
-  }
-  .md :global(h2) { margin-top: 2.75rem; font-size: 1.5rem; }
-  .md :global(h3) { margin-top: 2rem; font-size: 1.1875rem; }
-  .md :global(pre) { margin: 1.5rem 0; }
-  .md :global(img) { border: 1px solid var(--line); border-radius: var(--radius); margin: 1.5rem 0; }
-  .md :global(blockquote) {
-    margin: 1.5rem 0;
-    padding-left: 1.25rem;
-    border-left: 2px solid var(--line-strong);
-    color: var(--fg-dim);
-  }
-  .md :global(table) { border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9375rem; }
-  .md :global(th), .md :global(td) {
-    border: 1px solid var(--line);
-    padding: 0.5rem 0.75rem;
-    text-align: left;
-  }
-
-  .downloads {
-    margin-top: 3rem;
-    padding: 1.5rem 1.75rem;
-    background: var(--bg-island);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--sh-island);
-    max-width: var(--measure);
-  }
-  .downloads h2 { margin-top: 0; font-size: 1.1875rem; }
-  .downloads ul { list-style: none; padding: 0; }
-  .downloads li {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.4rem 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .downloads li span { font-family: var(--ff-mono); font-size: 0.8125rem; color: var(--fg-dim); }
-
-  .adjacent {
-    display: flex;
-    justify-content: space-between;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--line);
-    font-size: 0.9375rem;
-  }
-</style>

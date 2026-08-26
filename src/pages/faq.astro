@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro'
+import { SITE } from '../data/site'
 import { FAQ, FAQ_GROUPS } from '../data/faq'
 import { breadcrumbs, faqPage } from '../data/schema'
 
@@ -17,78 +18,49 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(
     ]),
   ]}
 >
-  <div class="wrap section">
-    <p class="eyebrow">FAQ</p>
-    <h1>Frequently asked questions</h1>
-    <p class="lede" style="max-width: 54ch">
-      Everything asked often enough to be worth writing down. If the answer you
-      need is not here,
-      <a href="https://github.com/followLemmi/cowork-deck/issues" rel="noopener"
-        >an issue</a
-      > is the right place to ask.
-    </p>
+  <div class="wrap">
+    <div class="phead">
+      <p class="eyebrow">FAQ</p>
+      <h1 class="h1--page">Frequently asked questions</h1>
+      <p class="lede">
+        Everything asked often enough to be worth writing down. If the answer you
+        need is not here,
+        <a href={SITE.issues} rel="noopener">an issue</a> is the right place to
+        ask.
+      </p>
+    </div>
 
-    <nav class="toc" aria-label="On this page">
-      <ul>
+    {/* A row of chips on the canvas rather than a boxed table of contents: an
+        island here would be a raised surface competing with nothing. */}
+    <nav aria-label="On this page">
+      <ul class="toc">
         {FAQ_GROUPS.map((g) => <li><a href={`#${slug(g)}`}>{g}</a></li>)}
       </ul>
     </nav>
 
-    {
-      FAQ_GROUPS.map((group) => (
-        <section class="faq-group">
-          <h2 id={slug(group)}>{group}</h2>
+    {FAQ_GROUPS.map((group) => (
+      <section class="qa-group">
+        <h2 id={slug(group)}>{group}</h2>
+        <div class="qa-list">
           {FAQ.filter((f) => f.group === group).map((item) => (
             <article class="qa">
               <h3 id={slug(item.q)}>{item.q}</h3>
               {item.html ? <p set:html={item.html} /> : <p>{item.a}</p>}
             </article>
           ))}
-        </section>
-      ))
-    }
+        </div>
+      </section>
+    ))}
 
-    <p class="faq-cta">
-      <a class="btn btn--primary" href="/install/">Download cowork-deck</a>
-    </p>
+    <div class="more">
+      <h2>Still reading</h2>
+      <p class="lede" style="margin-bottom: 0">
+        Nothing above needs an account, a key or a card.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn--primary" href="/install/">Download cowork-deck</a>
+        <a class="btn btn--ghost" href={SITE.repo} rel="noopener">Read the source</a>
+      </div>
+    </div>
   </div>
 </Base>
-
-<style>
-  .toc {
-    margin: 2.5rem 0 1rem;
-    padding: 1.25rem 1.5rem;
-    background: var(--bg-island);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--sh-island);
-    max-width: var(--measure);
-  }
-  .toc ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    max-width: none;
-  }
-  .toc li { margin: 0; }
-  .toc a { font-size: 0.9375rem; color: var(--fg-mid); text-decoration: none; }
-  .toc a:hover { color: var(--fg); text-decoration: underline; }
-
-  .faq-group { margin-top: 3.5rem; }
-  .faq-group h2 { font-size: 1.375rem; }
-  .qa {
-    border-top: 1px solid var(--line);
-    padding: 1.5rem 0;
-    max-width: var(--measure);
-  }
-  .qa h3 {
-    font-size: 1.0625rem;
-    margin: 0 0 0.5rem;
-    scroll-margin-top: 5rem;
-  }
-  .qa p { color: var(--fg-mid); margin: 0; }
-  .faq-cta { margin-top: 3.5rem; }
-</style>

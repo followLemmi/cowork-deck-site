@@ -1,0 +1,98 @@
+---
+/* The four session states, as four tiles built out of HTML rather than cropped
+ * out of a screenshot.
+ *
+ * This exists because the screenshot does not survive a phone: 1600px of dense
+ * terminal scaled to 335px is texture, not information — and the state rail is
+ * the one thing on this site a reader has to be able to read. Rebuilt, it is
+ * legible at 360px and crisp at any zoom.
+ *
+ * The fixture text is the harness's own, the same invented data the screenshots
+ * were shot against, so this component and /img/deck.webp cannot disagree.
+ *
+ * Used by the front page and by /design/; a change to a state's meaning belongs
+ * here, once. */
+
+type Tile = {
+  id: string
+  name: string
+  ctx: string
+  state: 'working' | 'waiting' | 'ended' | 'error'
+  label: string
+  lines: { text: string; tone?: 'sel' | 'dim' | 'err' }[]
+}
+
+const TILES: Tile[] = [
+  {
+    id: 'working',
+    name: 'Retry the refund webhook on a 410',
+    ctx: 'ctx 83.7k',
+    state: 'working',
+    label: 'working',
+    lines: [
+      { text: '* Resetting the backoff on restart…' },
+      { text: '(21s · ↑ 2.1k tokens)', tone: 'dim' },
+    ],
+  },
+  {
+    id: 'waiting',
+    name: 'Review the diff',
+    ctx: 'ctx 41.2k',
+    state: 'waiting',
+    label: 'needs input',
+    lines: [
+      { text: 'Do you want to proceed?' },
+      { text: '❯ 1. Yes', tone: 'sel' },
+      { text: '  2. No, tell Claude what to do', tone: 'dim' },
+    ],
+  },
+  {
+    id: 'done',
+    name: 'Nightly dependency sweep',
+    ctx: 'ctx 118.4k',
+    state: 'ended',
+    label: 'done',
+    lines: [
+      { text: 'Fourteen packages moved, the suite' },
+      { text: 'is green, and #161 is open.' },
+    ],
+  },
+  {
+    id: 'error',
+    name: '#128 · fix-flaky-timer',
+    ctx: 'ctx 9.9k',
+    state: 'error',
+    label: 'error',
+    lines: [
+      { text: 'error: linker `cc` not found', tone: 'err' },
+      { text: '[process exited with code 101]', tone: 'dim' },
+    ],
+  },
+]
+
+/* `ended` is the default rail and the default pill, so it takes no modifier. */
+const mod = (state: Tile['state'], base: string) =>
+  state === 'ended' ? base : `${base} ${base}--${state}`
+---
+
+<div class="tiles">
+  {TILES.map((tile) => (
+    <div class={mod(tile.state, 'tile')} data-od-id={`tile-${tile.id}`}>
+      <div class="tile__top">
+        <h3 class="tile__name">{tile.name}</h3>
+        <span class="tile__meta num">{tile.ctx}</span>
+        <span class={mod(tile.state, 'pill')}>{tile.label}</span>
+      </div>
+      <p class="tile__body">
+        {tile.lines.map((line) => (
+          <span class={line.tone}>{line.text}</span>
+        ))}
+      </p>
+    </div>
+  ))}
+</div>
+
+<p class="reading">
+  <span class="r--waiting">1 waiting for a decision</span>
+  <span class="r--error">1 stopped on an error</span>
+</p>
