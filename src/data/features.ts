@@ -21,6 +21,11 @@ export type FeatureMeta = {
   summary: string
   query: string
   image: string
+  /* Intrinsic size, so the browser reserves the right box before the image
+     arrives. One screenshot is a different shape from the others; a shared
+     constant here would be a layout shift on that one page. */
+  width: number
+  height: number
   imageAlt: string
   og: string
 }
@@ -36,6 +41,8 @@ export const FEATURES: FeatureMeta[] = [
       'A dozen agents running at once, and one glance that says which of them needs you.',
     query: 'how to run multiple Claude Code sessions at the same time',
     image: '/img/zoom.webp',
+    width: 1600,
+    height: 857,
     imageAlt:
       'One terminal zoomed to fill the window, the other sessions reduced to a filmstrip of cards below it, each card carrying its name, state, branch and token count.',
     og: '/og/sessions.png',
@@ -50,6 +57,8 @@ export const FEATURES: FeatureMeta[] = [
       'Work and personal, side by side, without `gh auth switch` and without either one leaking into the other.',
     query: 'use two GitHub accounts at the same time on one machine',
     image: '/img/workspace-window.webp',
+    width: 1600,
+    height: 1000,
     imageAlt:
       'A workspace pulled out into a window of its own: one workspace, its sessions, its board and its pull requests, and no rail at all.',
     og: '/og/workspaces.png',
@@ -64,6 +73,8 @@ export const FEATURES: FeatureMeta[] = [
       'Cards in your repo, or the repository’s issues. Either way, ▶ turns one into a running session.',
     query: 'task board for AI coding agents that launches the agent',
     image: '/img/board.webp',
+    width: 1600,
+    height: 857,
     imageAlt:
       'The board: configured columns of cards, each card carrying its kind and the arrows that move it, one card in the working step marked as having a session running on it.',
     og: '/og/board.png',
@@ -78,6 +89,8 @@ export const FEATURES: FeatureMeta[] = [
       'Issues open as documents. Pull requests carry their checks, their verdict and their diff.',
     query: 'review GitHub pull requests from a desktop app with AI sessions',
     image: '/img/pull-requests.webp',
+    width: 1600,
+    height: 857,
     imageAlt:
       'A pull request’s diff open in the workspace panel: two sticky line-number columns, plus and minus markers, added and removed bands.',
     og: '/og/pull-requests.png',
@@ -92,6 +105,8 @@ export const FEATURES: FeatureMeta[] = [
       'A prompt under a name, launched in one press — or hourly, daily, weekly, unattended.',
     query: 'schedule Claude Code to run automatically',
     image: '/img/deck.webp',
+    width: 1600,
+    height: 857,
     imageAlt:
       'Five Claude Code sessions as tiles in one window — one working, one waiting for a decision, one finished, one stopped on an error, one idle.',
     og: '/og/default.png',
@@ -106,6 +121,8 @@ export const FEATURES: FeatureMeta[] = [
       'Your workspaces and scenarios follow you to the next machine, through a repository nobody else owns.',
     query: 'sync developer tool settings between machines without a cloud account',
     image: '/img/issues.webp',
+    width: 1600,
+    height: 857,
     imageAlt:
       'The board reading a repository’s GitHub issues, filtered by state and label, each row deep enough to show an excerpt of the body.',
     og: '/og/issues.png',
