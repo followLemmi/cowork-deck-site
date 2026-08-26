@@ -1,8 +1,8 @@
 ---
-/* The frame every feature page shares: head, breadcrumb, title block, and the
-   cross-links at the foot. The page itself supplies only its prose, which is
-   the part that has to be unique — two pages with the same body are one page
-   as far as a search engine is concerned. */
+/* The frame every feature page shares: head, breadcrumb, title block, the
+ * screenshot, and the cross-links at the foot. The page itself supplies only
+ * its prose, which is the part that has to be unique — two pages with the same
+ * body are one page as far as a search engine is concerned. */
 import Base from './Base.astro'
 import { featureBySlug, FEATURES } from '../data/features'
 import { breadcrumbs, techArticle } from '../data/schema'
@@ -41,69 +41,43 @@ const others = FEATURES.filter((x) => x.slug !== slug).slice(0, 3)
       </ol>
     </nav>
 
-    <article class="feature">
-      <header>
-        <h1>{f.pageTitle}</h1>
+    <article>
+      <div class="phead phead--crumbed">
+        <h1 class="h1--page">{f.pageTitle}</h1>
         <p class="lede">{f.summary}</p>
-      </header>
+      </div>
 
-      <figure>
-        <img src={f.image} alt={f.imageAlt} width={f.width} height={f.height} loading="eager" />
+      <figure class="shot bleed" style="margin-top: 0">
+        <img
+          src={f.image}
+          alt={f.imageAlt}
+          width={f.width}
+          height={f.height}
+          fetchpriority="high"
+        />
       </figure>
 
-      <div class="prose">
+      <div class="prose" style="margin-top: clamp(2.5rem, 5vw, 3.5rem)">
         <slot />
       </div>
-    </article>
 
-    <aside class="more">
-      <h2>Also in cowork-deck</h2>
-      <div class="grid grid--3">
-        {
-          others.map((o) => (
-            <a class="island card feature-card" href={`/features/${o.slug}/`}>
-              <h3>{o.title}</h3>
-              <p>{o.summary}</p>
+      <aside class="more">
+        <h2>Also in cowork-deck</h2>
+        <div class="flist">
+          {others.map((o) => (
+            <a class="fitem" href={`/features/${o.slug}/`}>
+              <div>
+                <h3>{o.title}</h3>
+                <p>{o.summary}</p>
+              </div>
+              <span class="fitem__go">Read →</span>
             </a>
-          ))
-        }
-      </div>
-      <p class="more__cta">
-        <a class="btn btn--primary" href="/install/">Download cowork-deck</a>
-      </p>
-    </aside>
+          ))}
+        </div>
+        <div class="cta-row">
+          <a class="btn btn--primary" href="/install/">Download cowork-deck</a>
+        </div>
+      </aside>
+    </article>
   </div>
 </Base>
-
-<style>
-  .crumbs { padding: 1.5rem 0 0; }
-  .crumbs ol {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    font-size: 0.875rem;
-    color: var(--fg-dim);
-    max-width: none;
-  }
-  .crumbs li { margin: 0; }
-  .crumbs li + li::before { content: '/'; margin-right: 0.5rem; color: var(--line-strong); }
-  .crumbs a { color: var(--fg-dim); text-decoration: none; }
-  .crumbs a:hover { color: var(--fg); text-decoration: underline; }
-
-  .feature { padding: 2rem 0 1rem; }
-  .feature header { max-width: var(--measure); }
-  .feature h1 { font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem); }
-
-  .more {
-    border-top: 1px solid var(--line);
-    padding-top: 3rem;
-    margin-top: 3.5rem;
-  }
-  .more h2 { font-size: 1.25rem; margin-bottom: 1.25rem; }
-  .more__cta { margin-top: 2rem; }
-  .feature-card { display: block; text-decoration: none; }
-  .feature-card:hover { border-color: var(--line-strong); }
-</style>

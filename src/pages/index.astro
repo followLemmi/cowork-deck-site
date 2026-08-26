@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro'
+import StateTiles from '../components/StateTiles.astro'
 import { SITE } from '../data/site'
 import { FEATURES } from '../data/features'
 import { softwareApplication, website, faqPage } from '../data/schema'
@@ -21,6 +22,13 @@ const frontFaq = [
     a: 'Yes. It is MIT-licensed and the whole application is in a public GitHub repository, including the screenshot harness the images on this site were shot with.',
   },
 ]
+
+/* The lead feature carries a screenshot; the other five are rows. Which one
+   leads is a decision about the page, not about the feature — the account
+   binding is the one nothing else on the market does. */
+const LEAD = 'github-account-per-workspace'
+const lead = FEATURES.find((f) => f.slug === LEAD)!
+const rest = FEATURES.filter((f) => f.slug !== LEAD)
 ---
 
 <Base
@@ -33,24 +41,25 @@ const frontFaq = [
     <div class="wrap">
       <p class="eyebrow">Free · Open source · macOS and Linux</p>
       <h1>Run many Claude&nbsp;Code sessions at once.</h1>
-      <p class="lede hero__lede">
+      <p class="lede">
         cowork-deck is a desktop app that gives every session a tile with a real
         terminal in it, and answers one question at a glance:
         <em>which of these needs me?</em>
       </p>
 
-      <div class="hero__cta">
-        <a class="btn btn--primary" href="/install/">Download</a>
-        <a class="btn btn--ghost" href={SITE.repo} rel="noopener">Source on GitHub</a>
+      <div class="cta-row">
+        <a class="btn btn--primary" href="/install/">Download for macOS or Linux</a>
+        <a class="btn btn--ghost" href={SITE.repo} rel="noopener">Read the source</a>
       </div>
 
-      <p class="hero__states">
-        <span class="state state--working">working</span>
-        <span class="state state--waiting">waiting on you</span>
-        <span class="state state--error">stopped on an error</span>
+      <p class="facts">
+        <span><b>MIT</b> licensed</span>
+        <span><b>No</b> account, key or subscription</span>
+        <span><b class="num">~100 MB</b> resident</span>
+        <span><b>Runs</b> your own <code>claude</code></span>
       </p>
 
-      <figure class="hero__shot">
+      <figure class="shot bleed">
         <img
           src="/img/deck.webp"
           width="1600"
@@ -59,43 +68,73 @@ const frontFaq = [
           fetchpriority="high"
         />
         <figcaption>
-          Five sessions, five states, one glance. The bar down the left edge of
-          each tile is its state, so a dozen sessions read in one sweep instead
-          of a dozen labels. The two readings in the top bar count the only two
-          things that want a person.
+          Five sessions, five states, one glance. The two readings in the top bar
+          count the only two things that want a person. Every account, repository
+          and path on screen is invented fixture data, shot with the project's
+          own screenshot harness.
         </figcaption>
       </figure>
     </div>
   </section>
 
+  <section class="section" id="states">
+    <div class="wrap">
+      <div class="section__head">
+        <p class="eyebrow">How to read a deck</p>
+        <h2>Hue belongs to state, and to nothing else.</h2>
+      </div>
+      <p class="lede">
+        Green, amber and red mean working, waiting and broken. They are never
+        spent on decoration — which is why there is not one coloured button on
+        this page. A dozen sessions read in one sweep of the left edge.
+      </p>
+
+      <StateTiles />
+    </div>
+  </section>
+
   <section class="section">
     <div class="wrap">
-      <p class="eyebrow">The problem</p>
-      <h2>A window full of terminals does not tell you which one is stuck.</h2>
-      <div class="grid grid--3">
-        <div class="island card">
-          <h3>Tabs hide state</h3>
-          <p>
-            A tab strip shows names, not states. The session that has been
-            parked on a permission prompt for eleven minutes looks exactly like
-            the one that is working.
-          </p>
+      <div class="section__head">
+        <p class="eyebrow">The problem</p>
+        <h2>A window full of terminals does not tell you which one is stuck.</h2>
+      </div>
+
+      <div class="rows">
+        <div class="row">
+          <p class="row__idx num">01</p>
+          <div>
+            <h3>Tabs hide state</h3>
+            <p>
+              A tab strip shows names, not states. The session that has been
+              parked on a permission prompt for eleven minutes looks exactly like
+              the one that is working.
+            </p>
+          </div>
         </div>
-        <div class="island card">
-          <h3>tmux does not know what an agent is</h3>
-          <p>
-            A multiplexer splits panes. It has no idea that one of them finished
-            a turn, that another is blocked on a decision, or what any of them
-            has cost so far.
-          </p>
+
+        <div class="row">
+          <p class="row__idx num">02</p>
+          <div>
+            <h3>tmux does not know what an agent is</h3>
+            <p>
+              A multiplexer splits panes. It has no idea that one of them
+              finished a turn, that another is blocked on a decision, or what any
+              of them has cost so far.
+            </p>
+          </div>
         </div>
-        <div class="island card">
-          <h3>One account at a time</h3>
-          <p>
-            <code>gh auth switch</code> is global. Two projects on two GitHub
-            accounts means switching, remembering to switch back, and eventually
-            pushing as the wrong person.
-          </p>
+
+        <div class="row">
+          <p class="row__idx num">03</p>
+          <div>
+            <h3>One account at a time</h3>
+            <p>
+              <code>gh auth switch</code> is global. Two projects on two GitHub
+              accounts means switching, remembering to switch back, and
+              eventually pushing as the wrong person.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -103,14 +142,17 @@ const frontFaq = [
 
   <section class="section">
     <div class="wrap">
-      <p class="eyebrow">Half a minute of the real thing</p>
-      <h2>The deck never leaves the window.</h2>
+      <div class="section__head">
+        <p class="eyebrow">Half a minute of the real thing</p>
+        <h2>The deck never leaves the window.</h2>
+      </div>
       <p class="lede">
         A session finishes its turn and its rail changes live. One tile zooms
-        near-full while the rest fall into a filmstrip. A workspace's board
-        lists its repository's issues; a pull request unfolds into its diff.
+        near-full while the rest fall into a filmstrip. A workspace's board lists
+        its repository's issues; a pull request unfolds into its diff.
       </p>
-      <figure class="demo">
+
+      <figure class="shot bleed">
         <video
           controls
           muted
@@ -125,156 +167,118 @@ const frontFaq = [
           <source src="/img/demo.webm" type="video/webm" />
           <source src="/img/demo.mp4" type="video/mp4" />
         </video>
-        <figcaption>
-          Recorded against the project's screenshot harness, so every account,
-          repository and path on screen is invented fixture data.
-        </figcaption>
       </figure>
     </div>
   </section>
 
   <section class="section" id="features">
     <div class="wrap">
-      <p class="eyebrow">What it does</p>
-      <h2>Six things a terminal cannot do for you.</h2>
-      <div class="grid grid--2">
-        {
-          FEATURES.map((f) => (
-            <a class="island card feature-card" href={`/features/${f.slug}/`}>
+      <div class="section__head">
+        <p class="eyebrow">What it does</p>
+        <h2>Six things a terminal cannot do for you.</h2>
+      </div>
+
+      <div class="lead-feature">
+        <div>
+          <h3>{lead.title}</h3>
+          <p>
+            Bind each workspace to a <code>gh</code> account. Sessions in two
+            projects push, open pull requests and sign commits as two different
+            people — with no account switching, and with neither one leaking into
+            the other.
+          </p>
+          <a class="link-arrow" href={`/features/${lead.slug}/`}>
+            How the binding works
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <img
+          src={lead.image}
+          width={lead.width}
+          height={lead.height}
+          alt={lead.imageAlt}
+          loading="lazy"
+        />
+      </div>
+
+      <div class="flist">
+        {rest.map((f) => (
+          <a class="fitem" href={`/features/${f.slug}/`}>
+            <div>
               <h3>{f.title}</h3>
               <p>{f.summary}</p>
-              <span class="feature-card__more">Read more</span>
-            </a>
-          ))
-        }
+            </div>
+            <span class="fitem__go">Read →</span>
+          </a>
+        ))}
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <p class="eyebrow">Getting started</p>
-      <h2>Three steps, and none of them is an account.</h2>
+      <div class="section__head">
+        <p class="eyebrow">Getting started</p>
+        <h2>Three steps, and none of them is an account.</h2>
+      </div>
+
       <ol class="steps">
-        <li>
+        <li data-step="01">
           <strong>Install Claude Code</strong> and log in as you normally would.
           cowork-deck runs the <code>claude</code> already on your machine.
         </li>
-        <li>
+        <li data-step="02">
           <strong>Download the app</strong> — a <code>.dmg</code> for macOS, an
           AppImage, <code>.deb</code> or <code>.rpm</code> for Linux. Windows
           means building from source for now.
         </li>
-        <li>
+        <li data-step="03">
           <strong>Point a workspace at a project folder.</strong> The first
           session starts there. Everything else — accounts, boards, scenarios —
           is optional and off until you turn it on.
         </li>
       </ol>
-      <p>
-        <a class="btn btn--primary" href="/install/">Installation guide</a>
+
+      <a class="link-arrow" href="/install/">
+        The full installation guide, including the Gatekeeper note
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section__head">
+        <p class="eyebrow">Before you download</p>
+        <h2>Three questions worth answering first.</h2>
+      </div>
+
+      <div class="qa-list">
+        {frontFaq.map((item) => (
+          <article class="qa">
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </article>
+        ))}
+      </div>
+
+      <p style="margin-top: 1.75rem">
+        <a class="link-arrow" href="/faq/">
+          Every other question
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
       </p>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <p class="eyebrow">Before you download</p>
-      <h2>Three questions worth answering first.</h2>
-      <div class="faq">
-        {
-          frontFaq.map((item) => (
-            <div class="faq__item">
-              <h3>{item.q}</h3>
-              <p>{item.a}</p>
-            </div>
-          ))
-        }
+      <p class="eyebrow">Nothing to sign up for</p>
+      <h2 style="max-width: 24ch">Point it at a folder and start the first session.</h2>
+      <div class="cta-row" style="margin-top: 2rem">
+        <a class="btn btn--primary" href="/install/">Download for macOS or Linux</a>
+        <a class="btn btn--ghost" href={SITE.repo} rel="noopener">Build it from source</a>
       </div>
-      <p><a href="/faq/">Every other question →</a></p>
     </div>
   </section>
 </Base>
-
-<style>
-  .hero {
-    padding: clamp(3rem, 7vw, 5.5rem) 0 0;
-    background:
-      radial-gradient(
-        90rem 40rem at 50% -12rem,
-        rgba(246, 247, 249, 0.05),
-        transparent 65%
-      );
-  }
-  .hero h1 { max-width: 18ch; }
-  .hero__lede { max-width: 54ch; margin-bottom: 2rem; }
-  .hero__lede em { font-style: italic; color: var(--fg); }
-  .hero__cta { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-  .hero__states {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.35rem;
-    margin: 1.75rem 0 0;
-  }
-  .hero__shot { margin-top: 3rem; margin-bottom: 0; }
-
-  .demo video {
-    width: 100%;
-    height: auto;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--sh-float);
-    background: var(--bg-island);
-  }
-
-  .feature-card {
-    display: block;
-    text-decoration: none;
-    transition: border-color 0.12s ease, background-color 0.12s ease;
-  }
-  .feature-card:hover {
-    border-color: var(--line-strong);
-    background: color-mix(in srgb, var(--bg-island) 82%, var(--fg) 3%);
-  }
-  .feature-card__more {
-    display: inline-block;
-    margin-top: 0.9rem;
-    font-size: 0.9375rem;
-    color: var(--fg-dim);
-  }
-  .feature-card:hover .feature-card__more { color: var(--fg); }
-
-  .steps {
-    list-style: none;
-    counter-reset: step;
-    padding: 0;
-    margin: 2rem 0;
-    max-width: var(--measure);
-  }
-  .steps li {
-    counter-increment: step;
-    position: relative;
-    padding-left: 2.75rem;
-    margin-bottom: 1.25rem;
-    color: var(--fg-mid);
-  }
-  .steps li::before {
-    content: counter(step);
-    position: absolute;
-    left: 0;
-    top: 0.1rem;
-    width: 1.85rem;
-    height: 1.85rem;
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--line-strong);
-    border-radius: 50%;
-    font-family: var(--ff-display);
-    font-size: 0.875rem;
-    color: var(--fg);
-  }
-
-  .faq__item { border-top: 1px solid var(--line); padding: 1.5rem 0; }
-  .faq__item h3 { margin-bottom: 0.5rem; font-size: 1.0625rem; }
-  .faq__item p { color: var(--fg-mid); margin-bottom: 0; }
-</style>

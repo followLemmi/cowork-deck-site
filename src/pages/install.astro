@@ -72,46 +72,45 @@ const howTo = {
     ]),
   ]}
 >
-  <div class="wrap section">
-    <p class="eyebrow">Install</p>
-    <h1>Download cowork-deck</h1>
-    <p class="lede" style="max-width: 54ch">
-      Free and MIT-licensed. No account, no key, no subscription of its own — it
-      runs the <code>claude</code> you already have.
-      {latest && <> The current release is <strong>{latest.tag}</strong>.</>}
-    </p>
+  <div class="wrap">
+    <div class="phead">
+      <p class="eyebrow">Install{latest && <> · {latest.tag}</>}</p>
+      <h1 class="h1--page">Download cowork-deck</h1>
+      <p class="lede">
+        Free and MIT-licensed. No account, no key, no subscription of its own —
+        it runs the <code>claude</code> you already have.
+      </p>
+    </div>
+  </div>
 
-    <section id="claude-code" class="prereq island">
-      <h2>Before you start</h2>
-      <ul>
-        <li>
+  <section class="section" style="padding-top: 0">
+    <div class="wrap">
+      <div class="note" id="claude-code" style="margin-top: 0">
+        <p class="note__label">Before you start</p>
+        <p>
           <strong>Claude Code</strong>, installed and logged in. If
-          <code>claude</code> is not on your <code>PATH</code>, the app says so
-          on startup, and <code>COWORK_CLAUDE_PATH</code> pins the one you mean.
-        </li>
-        <li>
+          <code>claude</code> is not on your <code>PATH</code>, the app says so on
+          startup, and <code>COWORK_CLAUDE_PATH</code> pins the one you mean.
+        </p>
+        <p>
           <strong>The GitHub CLI</strong>, optionally — only for the account
           bindings, the boards that read issues, and the pull requests. Without
           it, everything else still works.
-        </li>
-      </ul>
-    </section>
+        </p>
+      </div>
 
-    <h2 id="download">Downloads</h2>
+      <h2 id="download" style="margin-top: clamp(2.5rem, 5vw, 3.5rem)">Downloads</h2>
 
-    {
-      !latest && (
+      {!latest && (
         <p>
           The download list could not be built at deploy time. Everything is on
           <a href={SITE.releases} rel="noopener">the releases page</a>.
         </p>
-      )
-    }
+      )}
 
-    {
-      mac.length > 0 && (
+      {mac.length > 0 && (
         <>
-          <h3>macOS</h3>
+          <h3 style="margin-top: 2rem">macOS</h3>
           <ul class="dl">
             {mac.map((d) => (
               <li>
@@ -127,13 +126,11 @@ const howTo = {
             need it, and it is not a sign that anything is wrong.
           </p>
         </>
-      )
-    }
+      )}
 
-    {
-      linux.length > 0 && (
+      {linux.length > 0 && (
         <>
-          <h3>Linux</h3>
+          <h3 style="margin-top: 2.5rem">Linux</h3>
           <ul class="dl">
             {linux.map((d) => (
               <li>
@@ -145,155 +142,169 @@ const howTo = {
             ))}
           </ul>
         </>
-      )
-    }
+      )}
 
-    <h3>Windows</h3>
-    <p>
-      No published bundle yet. It builds and runs — see
-      <a href="#source">building from source</a> — but nobody should read a
-      download button that produces an untested binary.
-    </p>
-
-    <p class="dl__all">
-      Older versions, checksums and release notes:
-      <a href={SITE.releases} rel="noopener">all releases on GitHub</a> ·
-      <a href="/changelog/">changelog</a>
-    </p>
-
-    <section id="gatekeeper" class="warn island">
-      <h2>macOS says the app “is damaged”</h2>
+      <h3 style="margin-top: 2.5rem">Windows</h3>
       <p>
-        <strong>It is not.</strong> That wording is Gatekeeper's, and what it
-        actually means is that the app is not notarized: there is no paid Apple
-        Developer account behind this project, so macOS quarantines the download
-        rather than checking a signature. Clear the flag once:
+        No published bundle yet. It builds and runs — see
+        <a href="#source">building from source</a> — but nobody should read a
+        download button that produces an untested binary.
       </p>
-      <pre><code>xattr -cr /Applications/cowork-deck.app</code></pre>
-      <p>
-        System Settings → Privacy &amp; Security → <em>Open Anyway</em> is the
-        same decision through the UI.
-      </p>
-      <p>
-        And if you would rather not clear a flag Apple put on a stranger's
-        binary — fair. Everything in the bundle is in
-        <a href={SITE.repo} rel="noopener">the public repository</a>, and
-        <code>npm run tauri build</code> produces the same app from source.
-      </p>
-    </section>
 
-    <h2 id="first-run">The first run</h2>
-    <ol>
-      <li>Create a workspace and point it at a project folder.</li>
-      <li>
-        Start a session in it. That is a real <code>claude</code> in a PTY, in
-        that folder.
-      </li>
-      <li>
-        Everything else is optional and off until you turn it on: the GitHub
-        binding, the board, scenarios, schedules, and sync.
-      </li>
-    </ol>
-    <p>
-      Two environment variables, both optional:
-      <code>COWORK_CLAUDE_PATH</code> pins a <code>claude</code> that is not on
-      <code>PATH</code>, and <code>COWORK_GH_PATH</code> does the same for
-      <code>gh</code>.
-    </p>
+      <p class="dl__after">
+        Older versions, checksums and release notes:
+        <a href={SITE.releases} rel="noopener">all releases on GitHub</a> ·
+        <a href="/changelog/">changelog</a>
+      </p>
+    </div>
+  </section>
 
-    <h2 id="source">Building from source</h2>
-    <p>
-      Needed on Windows, and the honest option anywhere. You will want
-      <a href="https://nodejs.org/" rel="noopener">Node.js</a> and npm, a
-      <a href="https://rustup.rs/" rel="noopener">Rust toolchain</a>, the
-      <a href="https://v2.tauri.app/start/prerequisites/" rel="noopener"
-        >Tauri v2 system dependencies</a
-      >, and Claude Code itself.
-    </p>
-    <pre><code>git clone https://github.com/followLemmi/cowork-deck.git
+  <section class="section section--tight" id="gatekeeper">
+    <div class="wrap">
+      <div class="note note--waiting" style="margin-top: 0">
+        <p class="note__label">macOS says the app “is damaged”</p>
+        <p>
+          <strong>It is not.</strong> That wording is Gatekeeper's, and what it
+          actually means is that the app is not notarized: there is no paid Apple
+          Developer account behind this project, so macOS quarantines the
+          download rather than checking a signature. Clear the flag once:
+        </p>
+        <div class="code">
+          <pre><code>xattr -cr /Applications/cowork-deck.app</code></pre>
+        </div>
+        <p>
+          System Settings → Privacy &amp; Security → <em>Open Anyway</em> is the
+          same decision through the UI.
+        </p>
+        <p>
+          And if you would rather not clear a flag Apple put on a stranger's
+          binary — fair. Everything in the bundle is in
+          <a href={SITE.repo} rel="noopener">the public repository</a>, and
+          <code>npm run tauri build</code> produces the same app from source.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="first-run">
+    <div class="wrap">
+      <div class="section__head">
+        <p class="eyebrow">The first run</p>
+        <h2>Three steps, and none of them is an account.</h2>
+      </div>
+
+      <ol class="steps">
+        <li data-step="01">
+          <strong>Create a workspace</strong> and point it at a project folder.
+        </li>
+        <li data-step="02">
+          <strong>Start a session in it.</strong> That is a real
+          <code>claude</code> in a PTY, in that folder.
+        </li>
+        <li data-step="03">
+          <strong>Everything else is optional</strong> and off until you turn it
+          on: the GitHub binding, the board, scenarios, schedules, and sync.
+        </li>
+      </ol>
+
+      <p>
+        Two environment variables, both optional:
+        <code>COWORK_CLAUDE_PATH</code> pins a <code>claude</code> that is not on
+        <code>PATH</code>, and <code>COWORK_GH_PATH</code> does the same for
+        <code>gh</code>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="source">
+    <div class="wrap">
+      <div class="section__head">
+        <p class="eyebrow">Building from source</p>
+        <h2>Needed on Windows, and the honest option anywhere.</h2>
+      </div>
+
+      <div class="prose">
+        <p>
+          You will want <a href="https://nodejs.org/" rel="noopener">Node.js</a>
+          and npm, a <a href="https://rustup.rs/" rel="noopener">Rust
+          toolchain</a>, the
+          <a href="https://v2.tauri.app/start/prerequisites/" rel="noopener"
+            >Tauri v2 system dependencies</a
+          >, and Claude Code itself.
+        </p>
+
+        <div class="code">
+          <pre><code>git clone https://github.com/followLemmi/cowork-deck.git
 cd cowork-deck
 npm install
 npm run tauri dev      # hot reload
 npm run tauri build    # a release bundle for this platform</code></pre>
-    <p>
-      In a fresh clone, run
-      <code>npm install &amp;&amp; npm run build &amp;&amp; npm run stage:reporter</code>
-      once before <code>cargo test</code>: neither <code>dist/</code> nor
-      <code>src-tauri/binaries/</code> is in git, and Tauri's build script fails
-      without them.
-    </p>
+        </div>
 
-    <h2>Uninstalling</h2>
-    <p>
-      Delete the app. Settings live in your platform's ordinary config directory
-      and your boards are markdown files in folders you chose — nothing is
-      hidden anywhere else, and nothing was sent anywhere.
-    </p>
-  </div>
+        <p>
+          In a fresh clone, run
+          <code>npm install &amp;&amp; npm run build &amp;&amp; npm run stage:reporter</code>
+          once before <code>cargo test</code>: neither <code>dist/</code> nor
+          <code>src-tauri/binaries/</code> is in git, and Tauri's build script
+          fails without them.
+        </p>
+
+        <h2 id="uninstall">Uninstalling</h2>
+        <p>
+          Delete the app. Settings live in your platform's ordinary config
+          directory and your boards are markdown files in folders you chose —
+          nothing is hidden anywhere else, and nothing was sent anywhere.
+        </p>
+      </div>
+    </div>
+  </section>
 
   <script is:inline>
-    /* Marks the download that matches the visitor's platform. Progressive
-       enhancement in the strict sense: with JavaScript off, every download is
-       still listed and labelled — this only saves a moment of reading. */
+    /* The only JavaScript on the site, and it is on this page because this is
+       the only page where it saves anyone anything. Two jobs, both progressive
+       enhancement: with the script blocked, every download is still listed and
+       labelled, and every command is still selectable by hand. */
     ;(function () {
+      /* Mark the download that matches the visitor's platform. */
       var p = navigator.platform || ''
       var ua = navigator.userAgent || ''
       var id = null
       if (/Mac/.test(p)) {
-        /* Apple silicon Macs report as Intel in the UA string; the WebGL
-           renderer is the usual tell, and being wrong here costs nothing
-           because both .dmg files stay visible. */
+        /* Apple silicon Macs report as Intel in the UA string; there is no
+           honest tell, so an arm hint is required rather than assumed. Being
+           wrong costs nothing: both .dmg files stay visible either way. */
         id = /arm|Apple/i.test(ua) ? 'macos-arm' : null
       } else if (/Linux/.test(p) && !/Android/.test(ua)) {
         id = 'linux-appimage'
       }
-      if (!id) return
-      var el = document.querySelector('[data-platform="' + id + '"]')
-      if (el) el.setAttribute('data-detected', 'true')
+      if (id) {
+        var hit = document.querySelector('[data-platform="' + id + '"]')
+        if (hit) hit.setAttribute('data-detected', 'true')
+      }
+
+      /* A copy button on each command, so nobody has to select a shell line by
+         dragging across it on a phone. */
+      if (!navigator.clipboard) return
+      Array.prototype.forEach.call(document.querySelectorAll('.code'), function (block) {
+        var pre = block.querySelector('pre')
+        if (!pre) return
+        var button = document.createElement('button')
+        button.type = 'button'
+        button.className = 'code__copy'
+        button.textContent = 'copy'
+        button.setAttribute('aria-label', 'Copy this command')
+        button.addEventListener('click', function () {
+          navigator.clipboard.writeText(pre.innerText).then(function () {
+            button.textContent = 'copied'
+            button.setAttribute('data-copied', 'true')
+            window.setTimeout(function () {
+              button.textContent = 'copy'
+              button.removeAttribute('data-copied')
+            }, 1600)
+          })
+        })
+        block.appendChild(button)
+      })
     })()
   </script>
 </Base>
-
-<style>
-  .prereq, .warn { padding: 1.5rem 1.75rem; margin: 2.5rem 0; }
-  .prereq h2, .warn h2 { margin-top: 0; font-size: 1.1875rem; }
-  .warn { border-left: 3px solid var(--st-waiting); }
-  .warn :last-child { margin-bottom: 0; }
-
-  h2 { margin-top: 3rem; }
-  h3 { margin-top: 2rem; }
-
-  .dl { list-style: none; padding: 0; max-width: var(--measure); }
-  .dl li { margin-bottom: 0.6rem; }
-  .dl__link {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.35rem 0.85rem;
-    padding: 0.9rem 1.15rem;
-    background: var(--bg-island);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    box-shadow: var(--sh-island);
-    text-decoration: none;
-    transition: border-color 0.12s ease;
-  }
-  .dl__link:hover { border-color: var(--line-strong); }
-  .dl__link[data-detected] { border-color: var(--fg-dim); }
-  .dl__link[data-detected]::after {
-    content: 'your platform';
-    font-family: var(--ff-mono);
-    font-size: 0.75rem;
-    color: var(--accent-ink);
-    background: var(--accent);
-    padding: 0.1rem 0.4rem;
-    border-radius: 4px;
-  }
-  .dl__label { font-family: var(--ff-display); font-weight: 500; }
-  .dl__meta {
-    font-family: var(--ff-mono);
-    font-size: 0.8125rem;
-    color: var(--fg-dim);
-  }
-  .dl__after, .dl__all { font-size: 0.9375rem; color: var(--fg-mid); }
-</style>

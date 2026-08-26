@@ -5,8 +5,10 @@ desktop deck for running many Claude Code sessions at once.
 
 Static, built with [Astro](https://astro.build/), deployed to GitHub Pages on
 every push to `main`. No client-side framework and no analytics; the only
-JavaScript that reaches a visitor is a dozen lines on the install page that
-mark which download matches their platform.
+JavaScript that reaches a visitor is one inline block on the install page, which
+marks the download matching their platform and puts a copy button on each
+command. Every other interactive part of the site is a `<details>` element and
+ships no script at all — including the mobile navigation.
 
 ## Running it
 
@@ -77,6 +79,28 @@ The palette is the app's own True Ink tokens, copied from `src/styles.css` in
 the application repository rather than imported. A landing page that had drifted
 a shade from the product it shows would be worse than one that never matched.
 The reasoning is on [/design/](https://coworkdeck.dev/design/).
+
+`src/styles/global.css` is the whole system — there is no per-page stylesheet
+worth the name. Three rules it enforces, written at the top of the file:
+
+- **Hue belongs to state.** Green, amber and red mean working, waiting and
+  broken, so there is not one coloured button on the site.
+- **Elevation is lightness,** and at most one surface per screen is raised: the
+  screenshot. Everything else is separated by a hairline on the canvas.
+- **Structure is rules and a numeric gutter, not a stack of cards.** Three
+  arguments are not three of the same object; six features are not six of one.
+
+Two consequences worth knowing before editing:
+
+- `src/components/StateTiles.astro` rebuilds the four session states in HTML
+  rather than cropping them out of a screenshot. 1600px of dense terminal scaled
+  to a 335px phone is texture, not information, and the state rail is the one
+  thing a reader has to be able to read. Its fixture text is the harness's, so
+  the component and `/img/deck.webp` cannot disagree.
+- Anything with `display: grid` in `global.css` — `.row`, `.fitem`, `.release`,
+  `.swatch` — needs its content wrapped in an element. A loose text node in a
+  grid container becomes its own grid item, which is how a three-step list once
+  rendered one word per line.
 
 ## Licence
 

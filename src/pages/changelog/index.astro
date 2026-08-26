@@ -29,70 +29,39 @@ const fmt = (iso: string) =>
     ]),
   ]}
 >
-  <div class="wrap section">
-    <p class="eyebrow">Changelog</p>
-    <h1>What has shipped</h1>
-    <p class="lede" style="max-width: 54ch">
-      Every release, with the reasoning rather than a list of commit subjects.
-      Also an <a href="/rss.xml">RSS feed</a>, if you would rather be told.
-    </p>
+  <div class="wrap">
+    <div class="phead">
+      <p class="eyebrow">Changelog</p>
+      <h1 class="h1--page">What has shipped</h1>
+      <p class="lede">
+        Every release, with the reasoning rather than a list of commit subjects.
+        Also an <a href="/rss.xml">RSS feed</a>, if you would rather be told.
+      </p>
+    </div>
 
+    {/* A dated list on hairlines, with the date in its own mono gutter. Seven
+        release cards would say these are seven of the same size, and they are
+        not — one of them was a single cherry-picked fix. */}
     <ol class="releases">
-      {
-        releases.map((r) => (
-          <li class="island release">
-            <div class="release__head">
-              <h2>
-                <a href={`/changelog/${r.tag}/`}>{r.tag}</a>
-              </h2>
-              <time datetime={r.publishedAt}>{fmt(r.publishedAt)}</time>
+      {releases.map((r) => (
+        <li class="release">
+          <p class="release__when">
+            <time datetime={r.publishedAt}>{fmt(r.publishedAt)}</time>
+          </p>
+          <div>
+            <h2>
+              <a href={`/changelog/${r.tag}/`}>{r.tag}</a>
               {r.prerelease && <span class="release__pre">pre-release</span>}
-            </div>
+            </h2>
             <p>{firstParagraph(r.body)}</p>
             <p class="release__links">
               <a href={`/changelog/${r.tag}/`}>Release notes</a>
               <a href={r.url} rel="noopener">On GitHub</a>
               {r.downloads.length > 0 && <a href="/install/">Download</a>}
             </p>
-          </li>
-        ))
-      }
+          </div>
+        </li>
+      ))}
     </ol>
   </div>
 </Base>
-
-<style>
-  .releases { list-style: none; padding: 0; margin: 3rem 0 0; max-width: var(--measure); }
-  .release { padding: 1.5rem 1.75rem; margin-bottom: 1.25rem; }
-  .release__head {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 0.5rem 1rem;
-    margin-bottom: 0.75rem;
-  }
-  .release h2 { margin: 0; font-size: 1.375rem; }
-  .release h2 a { text-decoration: none; }
-  .release h2 a:hover { text-decoration: underline; }
-  .release time {
-    font-family: var(--ff-mono);
-    font-size: 0.8125rem;
-    color: var(--fg-dim);
-  }
-  .release__pre {
-    font-family: var(--ff-mono);
-    font-size: 0.75rem;
-    color: var(--st-waiting);
-    border: 1px solid currentColor;
-    border-radius: 4px;
-    padding: 0.05rem 0.35rem;
-  }
-  .release p { color: var(--fg-mid); }
-  .release__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    margin: 1rem 0 0;
-    font-size: 0.9375rem;
-  }
-</style>

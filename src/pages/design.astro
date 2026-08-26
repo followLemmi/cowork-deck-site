@@ -41,15 +41,17 @@ const states = [
     ]),
   ]}
 >
-  <div class="wrap section">
-    <p class="eyebrow">Design</p>
-    <h1>True Ink</h1>
-    <p class="lede" style="max-width: 56ch">
+  <div class="wrap">
+    <div class="phead">
+      <p class="eyebrow">Design</p>
+      <h1 class="h1--page">True Ink</h1>
+      <p class="lede">
       A window holding twelve agent sessions has one job before it has any
       others: to say which of them needs a person. That constraint decided the
       whole palette, and it decided it in one sentence — <strong>hue belongs to
-      state</strong>.
-    </p>
+        state</strong>.
+      </p>
+    </div>
 
     <div class="prose">
       <h2>1 · Hue belongs to state, so the accent is light</h2>
@@ -71,7 +73,7 @@ const states = [
       <div class="swatches" role="list">
         {
           states.map((s) => (
-            <div class="swatch swatch--state" role="listitem">
+            <div class="swatch" role="listitem">
               <span class="swatch__chip" style={`background:${s.hex}`}></span>
               <code>{s.token}</code>
               <span class="swatch__hex">{s.hex}</span>
@@ -214,41 +216,3 @@ const states = [
     </div>
   </div>
 </Base>
-
-<style>
-  .swatches {
-    display: grid;
-    gap: 0.5rem;
-    margin: 2rem 0 2.5rem;
-    max-width: var(--measure);
-  }
-  .swatch {
-    display: grid;
-    grid-template-columns: 2.25rem 11rem 5.5rem 1fr;
-    align-items: center;
-    gap: 0.85rem;
-    padding: 0.55rem 0.75rem;
-    background: var(--bg-island);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    font-size: 0.9375rem;
-  }
-  .swatch__chip {
-    width: 2.25rem;
-    height: 1.6rem;
-    border-radius: 5px;
-    border: 1px solid var(--line-strong);
-  }
-  .swatch code { background: none; padding: 0; font-size: 0.875rem; }
-  .swatch__hex {
-    font-family: var(--ff-mono);
-    font-size: 0.8125rem;
-    color: var(--fg-dim);
-  }
-  .swatch__note { color: var(--fg-mid); font-size: 0.9375rem; }
-
-  @media (max-width: 640px) {
-    .swatch { grid-template-columns: 2.25rem 1fr; }
-    .swatch__hex, .swatch__note { grid-column: 2; }
-  }
-</style>
