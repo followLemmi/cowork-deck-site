@@ -3,6 +3,11 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # The build and the SEO gate run on every pull request as well, and the
+  # ruleset on main requires them to pass. A broken canonical, a duplicated
+  # description or a 2 MB screenshot cannot be merged.
+  pull_request:
+    branches: [main]
   # The changelog and the download links are baked in at build time, so a new
   # release in the application repository has to trigger a rebuild here. Two
   # ways in: a nightly run that needs nobody, and a manual one for when you do
@@ -22,7 +27,7 @@ permissions:
 
 # A queued deploy replaces the one waiting, never cancels the one running.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -51,12 +56,15 @@ jobs:
         run: node scripts/check-seo.mjs
 
       - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
       - uses: actions/upload-pages-artifact@v4
+        if: github.event_name != 'pull_request'
         with:
           path: dist
 
   deploy:
     needs: build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
