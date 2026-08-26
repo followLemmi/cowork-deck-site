@@ -1,0 +1,32 @@
+# The pull request gate, on its own.
+#
+# It lives apart from deploy.yml because a check that blocks a merge should not
+# share a file with the job that publishes: the deploy workflow carries
+# `pages: write`, an environment and a concurrency group, none of which a
+# proposal needs, and every one of which is a way for the gate to be skipped
+# for a reason that has nothing to do with the proposal.
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build
+        run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check the build for the mistakes that cost rankings
+        run: node scripts/check-seo.mjs
