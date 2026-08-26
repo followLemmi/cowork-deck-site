@@ -1,0 +1,176 @@
+---
+import Base from '../../layouts/Base.astro'
+import { SITE } from '../../data/site'
+import { breadcrumbs, person } from '../../data/schema'
+import { renderMarkdown, firstParagraph } from '../../data/markdown'
+import data from '../../data/releases.json'
+
+export function getStaticPaths() {
+  return data.releases.map((release) => ({
+    params: { tag: release.tag },
+    props: { release },
+  }))
+}
+
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+const fmtShort = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+
+const { release } = Astro.props
+const body = await renderMarkdown(release.body)
+
+/* Leading with the version: the three earliest releases share one body, so the
+   excerpt alone does not tell them apart — and a result that opens with the
+   version is easier to scan anyway. */
+const excerpt = firstParagraph(release.body, 120)
+const metaDescription = `cowork-deck ${release.tag}, released ${fmtShort(
+  release.publishedAt,
+)}. ${excerpt}`
+  .trim()
+  .slice(0, 160)
+
+const index = data.releases.findIndex((r) => r.tag === release.tag)
+const newer = index > 0 ? data.releases[index - 1] : null
+const older = index < data.releases.length - 1 ? data.releases[index + 1] : null
+const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`
+---
+
+<Base
+  title={`cowork-deck ${release.tag} release notes`}
+  description={metaDescription}
+  publishedTime={release.publishedAt}
+  schema={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'TechArticle',
+      headline: `cowork-deck ${release.tag} release notes`,
+      description: excerpt,
+      url: `${SITE.url}/changelog/${release.tag}/`,
+      datePublished: release.publishedAt,
+      author: person,
+      publisher: person,
+      inLanguage: 'en',
+      isPartOf: { '@id': `${SITE.url}/#website` },
+      about: { '@id': `${SITE.url}/#app` },
+    },
+    breadcrumbs([
+      { name: 'cowork-deck', path: '/' },
+      { name: 'Changelog', path: '/changelog/' },
+      { name: release.tag, path: `/changelog/${release.tag}/` },
+    ]),
+  ]}
+>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">cowork-deck</a></li>
+        <li><a href="/changelog/">Changelog</a></li>
+        <li aria-current="page">{release.tag}</li>
+      </ol>
+    </nav>
+
+    <article class="release">
+      <header>
+        <h1>cowork-deck {release.tag}</h1>
+        <p class="release__date">
+          <time datetime={release.publishedAt}>{fmt(release.publishedAt)}</time>
+          {release.prerelease && <> · pre-release</>}
+        </p>
+      </header>
+
+      <div class="prose md" set:html={body} />
+
+      {
+        release.downloads.length > 0 && (
+          <section class="downloads">
+            <h2>Downloads for {release.tag}</h2>
+            <ul>
+              {release.downloads.map((d) => (
+                <li>
+                  <a href={d.url} rel="noopener">{d.label}</a>
+                  <span>{mb(d.size)}</span>
+                </li>
+              ))}
+            </ul>
+            <p>
+              On macOS, read <a href="/install/#gatekeeper">the Gatekeeper note</a> first.
+            </p>
+          </section>
+        )
+      }
+
+      <nav class="adjacent" aria-label="Other releases">
+        {newer && <a href={`/changelog/${newer.tag}/`}>← {newer.tag}, which came after</a>}
+        {older && <a href={`/changelog/${older.tag}/`}>{older.tag}, which came before →</a>}
+      </nav>
+    </article>
+  </div>
+</Base>
+
+<style>
+  .crumbs { padding: 1.5rem 0 0; }
+  .crumbs ol {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    list-style: none; margin: 0; padding: 0;
+    font-size: 0.875rem; color: var(--fg-dim); max-width: none;
+  }
+  .crumbs li { margin: 0; }
+  .crumbs li + li::before { content: '/'; margin-right: 0.5rem; color: var(--line-strong); }
+  .crumbs a { color: var(--fg-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--fg); text-decoration: underline; }
+
+  .release { padding: 2rem 0 1rem; }
+  .release__date {
+    font-family: var(--ff-mono);
+    font-size: 0.875rem;
+    color: var(--fg-dim);
+  }
+  .md :global(h2) { margin-top: 2.75rem; font-size: 1.5rem; }
+  .md :global(h3) { margin-top: 2rem; font-size: 1.1875rem; }
+  .md :global(pre) { margin: 1.5rem 0; }
+  .md :global(img) { border: 1px solid var(--line); border-radius: var(--radius); margin: 1.5rem 0; }
+  .md :global(blockquote) {
+    margin: 1.5rem 0;
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--line-strong);
+    color: var(--fg-dim);
+  }
+  .md :global(table) { border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9375rem; }
+  .md :global(th), .md :global(td) {
+    border: 1px solid var(--line);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+
+  .downloads {
+    margin-top: 3rem;
+    padding: 1.5rem 1.75rem;
+    background: var(--bg-island);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--sh-island);
+    max-width: var(--measure);
+  }
+  .downloads h2 { margin-top: 0; font-size: 1.1875rem; }
+  .downloads ul { list-style: none; padding: 0; }
+  .downloads li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .downloads li span { font-family: var(--ff-mono); font-size: 0.8125rem; color: var(--fg-dim); }
+
+  .adjacent {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.9375rem;
+  }
+</style>

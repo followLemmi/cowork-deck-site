@@ -1,0 +1,321 @@
+{
+  "fetchedAt": "2026-08-26T13:50:45.614Z",
+  "repo": "followLemmi/cowork-deck",
+  "releases": [
+    {
+      "tag": "v0.5.0",
+      "name": "cowork-deck v0.5.0",
+      "url": "https://github.com/followLemmi/cowork-deck/releases/tag/v0.5.0",
+      "publishedAt": "2026-08-26T12:47:26Z",
+      "prerelease": false,
+      "body": "The first release since 0.4.1 that carries anything: that one was a single cherry-picked fix, and\n`dev` had been more than a hundred commits ahead of `main` ever since. Three things ship, each an\nepic of its own — a workspace can leave the window, your setup can follow you to another machine, and\nthe interface is a new one.\n\n## A workspace in a window of its own\n\nPull a workspace out — the button on its row, or drag it out of the window on macOS — and it gets a\nwindow holding that workspace and nothing else. Its sessions go with it, alive, with their scrollback:\nthe new window claims each one before the old lets go, so a failure at any point leaves them where\nthey were rather than nowhere.\n\nIn the main window the workspace does not vanish. Its row stays, marked as being elsewhere, with its\nsessions still listed under it and still counted; clicking either raises the window that has them.\nClosing that window hands the workspace back, and there is an explicit way to send it back without\nclosing anything.\n\nA pulled-out window is now that project's and only that project's: no rail, one workspace in the\npanel, and no app-wide settings inside a window that is one repository. It also stops opening on\nwhichever workspace the *main* window had active — that answer lives in a file the main window owns.\n\n## The same setup on your other machine\n\nWorkspaces, their GitHub bindings, scenarios and the run journal can live in a private GitHub\nrepository of your own. Off until you switch it on, from **Memory sync…** in the command palette;\nswitching it on needs `gh` and a connected account, and offers both halves of the job — create a\nprivate repository, or connect one you already have, which is what every machine after the first does.\n\nWhat travels is an allowlist, and a test asserts the tracked set equals it exactly: session layout,\nwindow state and terminal drawers stay on the machine they belong to. Absolute paths never travel\neither — a workspace arriving from elsewhere has no folder here until you point it at one, and a\nschedule arrives switched off, so a job that fires at 03:00 does not start firing at 03:00 on two\nmachines at once. Conflicts are not resolved for you: notes are prose, and an automatic merge\nproduces a plausible paragraph nobody wrote.\n\nThe repository is private, and worth keeping that way.\n\n## A new interface\n\n**True Ink** replaces Slate & Ember, for two reasons neither of which is taste: the warm cast read as\nbrown beside the working green, and height was declared and not delivered — a large drop shadow has\nnowhere to go on a ground that is already nearly black. The cast is cool and almost absent now,\nelevation is lightness rather than shadow, and the accent is light itself. Hue still belongs to state,\nand only to state: green working, amber waiting on you, red broken. The terminal deliberately keeps\nOne Dark — it is a window onto another program.\n\n**And there are no screens.** The window is a rail, one panel and a deck that never leaves the row;\nwhen a page needs width the deck yields into its filmstrip rather than disappearing. Workspaces and\nsessions are one tree, so creation is positional — the last row inside each group is *New session in\n`<name>`*, at the place the new session will appear. The board and the pull requests left the rail for\nthe workspace they belong to, because they are one repository's rather than the app's. The four tabs\nin the top bar became a ledger — \"1 waiting for a decision\", \"1 stopped on an error\" — each reading\nopening one of the sessions it counted, and a crumb beside it says which workspace and which account\nthe window is on.\n\nA session row is two lines now: the name on a line of its own, the state and the git branch under it.\nThe state chip used to lead every row, and it is the widest thing there, so a dozen sessions read as a\ncolumn of pills rather than as a list of names.\n\nEvery colour pair the interface claims is measured by `npm run contrast`, which fails the build when\none falls under its threshold.\n\n## Also in this release\n\n- Settings became a window of its own at the foot of the rail, with a rail of sections inside it.\n- Every panel takes a width from the person using it, and remembers it.\n- A zoomed session gets its own tools, scoped to its own checkout.\n- The last Russian strings left the interface; it is English throughout.\n\n## Fixed\n\n- Pressing a session that belongs to another workspace moved the deck and nothing else — the panel,\n  the crumb, the board and the pull requests all stayed on the workspace you had just left.\n- Two windows could lose each other's tiles: `sessions.json` had no owner, and each window wrote the\n  whole file. Rust now refuses a write or a resize from a window that no longer holds the session.\n- The first sync could not work at all, and a pull could destroy records.\n- A window that had closed was not let go of, so its workspace stayed marked as elsewhere and\n  unselectable.\n- The sidebar could re-render itself in a loop.\n- The panel clipped its own pages at a narrow window.\n- Sessions get the login shell's `PATH` on every route, not only some of them (this one shipped in\n  0.4.1 and is here for completeness).\n\n## Not in this release\n\nProject memory is the next thing being built. Its sidecar is in the bundle and tested, and nothing in\nthe app calls it yet — what travels in sync today is a place kept for the corpus rather than a corpus.\n\n---\n\n## Install\n\n**macOS** — download the `.dmg` for your architecture (`aarch64` for Apple Silicon, `x64` for Intel),\ndrag the app to Applications, then clear the quarantine flag once:\n\n```\nxattr -cr /Applications/cowork-deck.app\n```\n\nThat wording Gatekeeper uses — \"the app is damaged\" — means the bundle is not notarized, not that\nanything is wrong with it. There is no paid Apple Developer account behind this project yet.\n\n**Linux** — download the `.AppImage`, `chmod +x` it and run, or install the `.deb`.\n\nThe app checks this page for updates on launch and installs them in place; the `xattr` step is\nfirst-install only.\n\n**Upgrading from 0.4.x** — nothing to do. Your workspaces, scenarios and sessions are read as they\nare; sync is off until you switch it on, and no existing setting changes meaning.\n",
+      "downloads": [
+        {
+          "id": "macos-arm",
+          "label": "macOS · Apple silicon",
+          "name": "cowork-deck_0.5.0_aarch64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.5.0/cowork-deck_0.5.0_aarch64.dmg",
+          "size": 9704639
+        },
+        {
+          "id": "macos-intel",
+          "label": "macOS · Intel",
+          "name": "cowork-deck_0.5.0_x64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.5.0/cowork-deck_0.5.0_x64.dmg",
+          "size": 9872564
+        },
+        {
+          "id": "linux-appimage",
+          "label": "Linux · AppImage",
+          "name": "cowork-deck_0.5.0_amd64.AppImage",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.5.0/cowork-deck_0.5.0_amd64.AppImage",
+          "size": 88394232
+        },
+        {
+          "id": "linux-deb",
+          "label": "Linux · Debian and Ubuntu",
+          "name": "cowork-deck_0.5.0_amd64.deb",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.5.0/cowork-deck_0.5.0_amd64.deb",
+          "size": 11393252
+        },
+        {
+          "id": "linux-rpm",
+          "label": "Linux · Fedora and RHEL",
+          "name": "cowork-deck-0.5.0-1.x86_64.rpm",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.5.0/cowork-deck-0.5.0-1.x86_64.rpm",
+          "size": 11396389
+        }
+      ]
+    },
+    {
+      "tag": "v0.4.1",
+      "name": "cowork-deck v0.4.1",
+      "url": "https://github.com/followLemmi/cowork-deck/releases/tag/v0.4.1",
+      "publishedAt": "2026-08-25T13:54:21Z",
+      "prerelease": false,
+      "body": "A patch release carrying one fix, lifted out of `dev` on its own because it makes\nthe app unusable with any MCP server and nothing else in this release is worth\nwaiting for.\n\n## Sessions get the login shell's `PATH` (#332)\n\nA session launched from the app ran with launchd's\n`/usr/bin:/bin:/usr/sbin:/sbin` and nothing else, so everything the agent then\nspawned failed to resolve: stdio MCP servers (`npx …`, `#!/usr/bin/env node`\nshims), hooks, the Bash tool. What that looked like from the outside was a set of\nMCP servers that simply never came up —\n\n```\nConnection failed (ENOENT): Executable not found in $PATH: \"npx\"\nServer stderr: env: node: No such file or directory\n```\n\n— while the same servers, run by hand from a terminal, answered normally.\n\nThe nesting is why it went unnoticed for so long. The app captured a `PATH` only\nwhen finding `claude` had to go through the login shell, which reads as the right\ncondition and is not: the `PATH` is needed less by `claude` itself than by\neverything it starts. An npm-installed `claude` happened to work, because it\nfails `--version` under launchd's `PATH`, falls through to the login shell and\npicks up an environment on the way. A **natively installed** `claude` is a\nself-contained binary, passes that check, and short-circuits the only stage that\ncaptured anything — so its sessions found no `node` at all.\n\nThe login shell's `PATH` is now asked for on every route, once per run and warmed\nwhile a workspace is being prepared, so no launch pays for a login shell on a path\nanybody is watching. A `claude` found *through* the login shell keeps the exact\nenvironment it was validated under.\n\nOne deliberate change of behaviour: `COWORK_CLAUDE_PATH` now gets the login\n`PATH` too. The override names a binary, not an environment.\n\n## Nothing else changed\n\nNo feature, no settings, no on-disk format. This is 0.4.0 with `node` back on the\nsession's `PATH`, and everything listed as still open there is still open.\n\n---\n\n## Install\n\n**macOS** — download the `.dmg` for your architecture (`aarch64` for\nApple Silicon, `x64` for Intel), drag the app to Applications, then\nclear the quarantine flag once:\n\n```\nxattr -cr /Applications/cowork-deck.app\n```\n\n**Linux** — download the `.AppImage`, `chmod +x` it and run, or\ninstall the `.deb`.\n\nThe app checks this page for updates on launch and installs them\nin place; the `xattr` step is first-install only.\n",
+      "downloads": [
+        {
+          "id": "macos-arm",
+          "label": "macOS · Apple silicon",
+          "name": "cowork-deck_0.4.1_aarch64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.4.1/cowork-deck_0.4.1_aarch64.dmg",
+          "size": 9467314
+        },
+        {
+          "id": "macos-intel",
+          "label": "macOS · Intel",
+          "name": "cowork-deck_0.4.1_x64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.4.1/cowork-deck_0.4.1_x64.dmg",
+          "size": 9640366
+        },
+        {
+          "id": "linux-appimage",
+          "label": "Linux · AppImage",
+          "name": "cowork-deck_0.4.1_amd64.AppImage",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.4.1/cowork-deck_0.4.1_amd64.AppImage",
+          "size": 88181240
+        },
+        {
+          "id": "linux-deb",
+          "label": "Linux · Debian and Ubuntu",
+          "name": "cowork-deck_0.4.1_amd64.deb",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.4.1/cowork-deck_0.4.1_amd64.deb",
+          "size": 11142030
+        },
+        {
+          "id": "linux-rpm",
+          "label": "Linux · Fedora and RHEL",
+          "name": "cowork-deck-0.4.1-1.x86_64.rpm",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.4.1/cowork-deck-0.4.1-1.x86_64.rpm",
+          "size": 11143859
+        }
+      ]
+    },
+    {
+      "tag": "v0.4.0",
+      "name": "cowork-deck v0.4.0",
+      "url": "https://github.com/followLemmi/cowork-deck/releases/tag/v0.4.0",
+      "publishedAt": "2026-08-24T11:49:32Z",
+      "prerelease": false,
+      "body": "Until now the app had no terminal in it. Working on a repository through the deck\nmeant alt-tabbing to a separate window, standing in a directory the app could not\nknow about and under whatever git identity the machine happened to have. This\nrelease puts a shell in the app — and, because a shell breaks every assumption the\nPTY layer was quietly built on, fixes the eight defects that finding out produced.\n\nThe terminal is also no longer the slow part of the window: it draws from a glyph\natlas rather than by rebuilding DOM rows, its output crosses into the webview\nbatched and as bytes, and neither a drag nor a resize asks a running agent to\nrepaint itself a hundred and fifty times on the way.\n\n## What people get\n\n**An embedded terminal, per workspace** (#225). A drawer under the deck holding\nordinary interactive shells. `Cmd+J` (`Ctrl+Shift+J` on Windows and Linux) opens\nit, and opening it empty opens a shell — a strip with a `+` and nothing in it is a\nworse answer to \"give me a terminal\" than a terminal. Tabs, `+`, double-click to\nrename, drag the top edge to resize.\n\n- **A drawer, not another tile kind.** A deck tile is one unit of *agent* work: a\n  state chip driven by hooks, a restart that resumes a conversation, a broadcast\n  checkbox, a name read out of a transcript. A shell has none of that and would\n  carry four controls that mean nothing while competing for the space the sessions\n  are the point of. What a terminal needs is tabs, and to be out of the way when it\n  is not in use.\n- **It is your own `$SHELL`**, started in the active workspace's folder, carrying\n  that workspace's GitHub account — a login shell on macOS, where an `.app`\n  otherwise inherits launchd's minimal `PATH`.\n- **One line before the first prompt** names the folder, the branch, the account and\n  the git identity it will commit as. That line is the only way to check the last of\n  those: the binding is injected as `GIT_AUTHOR_*`, which outranks `.git/config`, so\n  `git config user.email` inside the shell reports the value that loses. Output is\n  held until the banner is written, because a prompt that got there first would push\n  the explanation below the thing it explains.\n- **A terminal belongs to its workspace** the way a tile does. Switch projects and\n  you get that project's terminals, on the tab you left it on; a project you have\n  never opened one in has no drawer at all, rather than an empty strip shortening\n  its deck. Nothing is closed by switching — the shells keep running and their\n  scrollback is where you left it, which is also what makes coming back instant. A\n  terminal whose workspace was *deleted* stays visible from everywhere, exactly as\n  an orphaned tile is: a terminal nobody can switch to is a terminal nobody can\n  close.\n- **Tabs survive a restart** as new shells in the same folders under the same names.\n  That is the honest most a shell can offer — there is no conversation to resume.\n- **Eight at once**, and closing one that is running a job asks first. A shell has\n  no hooks, so its state would read `idle` four minutes into a release build;\n  the process table is read instead.\n\n**Nothing is torn down without asking** (#230). Quitting the app now refuses the\nfirst gesture and names the sessions with something running in them — a build, a\ntest run, a command in the drawer. A second gesture goes through regardless, so the\napp can never become unquittable. A session sitting at a prompt, and an agent's own\nlong-lived helpers, are not counted: a question that is always there is one people\nlearn to click through.\n\n**And \"killed\" now means the process session** (#226), not the one process the app\nstarted. A shell puts each command it is given into a process group of its own, so a\n`npm run build` was never reachable by signalling the shell — it outlived the\nsession that started it. Teardown is now SIGTERM to the foreground group, SIGHUP and\nSIGTERM to the leader, a grace period, then SIGKILL to whatever is still in that\nprocess session, guarded so it can never match the app's own. The same teardown runs\nhowever the app ends: closing the window, `Cmd+Q`, or the updater relaunching it.\n\n**A terminal that draws at the display's rate** (#261, in part; #186, in part).\n\n- **The renderer.** Only `fit`, `search` and `unicode11` were loaded, so xterm ran\n  its DOM renderer and every refresh of a dirty row rebuilt all of that row's spans.\n  `@xterm/addon-webgl` draws from a glyph atlas instead. A cap comes with it and is\n  not optional — WebKit keeps a process-wide ceiling on live WebGL contexts and\n  force-loses the oldest rather than refusing the next, so an uncapped tile scrolled\n  out of sight would blank the terminal someone is reading. Eight contexts, handed to\n  whichever panels are on screen, a freed slot going to whoever waited longest, and a\n  lost context falling back to the DOM renderer rather than to nothing.\n- **The cursor stops strobing.** It was a DOM-renderer defect, not a font one:\n  blinking is a CSS animation on the cursor's span, and the renderer rebuilds that\n  span on every repaint of its row, restarting the animation at 0%. Under a TUI that\n  repaints its input line continuously the cycle never completed. The WebGL renderer\n  blinks off a 600 ms timer no repaint touches, so `cursorBlink` follows the\n  renderer: on with it, off without. A cursor that does not blink is a small loss; a\n  cursor that strobes is the complaint.\n- **Typing no longer queues behind output.** One PTY read was one\n  `evaluateJavaScript` on the webview's main thread — the same thread that delivers\n  keystrokes — and on Darwin the tty caps a single read at 1024 bytes, four times\n  smaller than Linux's 4096, so the same agent output cost four times the calls on a\n  Mac. Reads landing within 4 ms of each other are now passed on as one, capped at\n  64 KB. 4 ms sits under a frame at 240 Hz, and it is also the worst case added to a\n  keystroke echo, which is the one place the latency would be felt.\n- **Output crosses as bytes.** `app.emit` embeds its payload as a JSON literal in a\n  JS source string, so terminal output was base64'd (+33%), pasted into JavaScript,\n  parsed by the JS parser, `atob`'d, and walked a byte at a time by a callback. A\n  per-session `Channel` sends binary over the custom protocol instead. None of those\n  four steps remain, and the frontend no longer walks the tile map once per chunk to\n  work out whose bytes it is holding.\n- **A drag reads layout once and writes once a frame** (#262, in part). Both pointer\n  drags wrote a size and read layout straight back inside `pointermove`, forcing a\n  synchronous layout, so the engine never got to coalesce two events into one frame\n  and every event paid the whole cost. Against a 2500-row diff with five pointer\n  events in a single frame: **85.9 ms of blocking and 15 layout reads, down to 0.2 ms\n  and none**. `src/drag.ts` now holds the rule so the next grip is born with it.\n- **A resize reaches the PTY once, when it is over** (#263, in part). A resize is an\n  ioctl, a `SIGWINCH` and a full-screen redraw by whatever is running — `claude`\n  answers one by drawing its entire interface again. Nothing throttled it. A window\n  resized in 32 steps with five live terminals went from 10 calls, all of them\n  mid-gesture, to 0 mid-gesture and then 5: one per terminal, at the final size.\n  Trailing edge, because the size that reaches the child has to be the one the\n  gesture ended on.\n\n## Defects the shell uncovered\n\nAll eight were found by asking what an ordinary shell needs that `claude` never did.\n`pty.rs` now states its four assumptions at the top and enforces them.\n\n- **#227** — respawning under a live session id let a dead process paint into its\n  successor's terminal. `spawn` refuses a live id unless the restart button passes an\n  explicit flag, and each spawn carries a generation its reader and waiter check.\n- **#228** — exit was one boolean, which made \"your build failed\", \"we hung you up at\n  shutdown\" and \"the wait itself failed\" the same value. It now carries an exit code,\n  a signal name and an unknown flag; a signalled process reads as ended rather than\n  errored, and the tile prints what happened.\n- **#229** — `CloseRequested` was handled for any window while `AppState` is\n  app-level, so one `close()` on the status pill would have killed every session in\n  the app. Scoped to the main window.\n- **#231** — `start_session` resolved `claude`'s location and the workspace's `gh`\n  token inline, on the thread that paints the window: up to ten seconds of freeze per\n  launch, while the doctrine at the top of `commands.rs` claimed the session commands\n  could not block. Both are resolved off that thread now, before each launch.\n  Keystrokes typed before the process exists are held and flushed in order rather\n  than discarded.\n- **#232** — `GIT_SSH_COMMAND`'s key path was unquoted, and git hands that variable\n  to `/bin/sh`, so a path with a space in it made ssh read the rest as a hostname.\n  `IdentitiesOnly=yes` is dropped with it: it is not scoped per remote, so inside the\n  app it broke every push to any host but the bound one.\n- **#233** — the shared `gh` no-auth directory was writable, so the `gh auth login`\n  that \"you are not logged in\" invites could turn one account into app-wide state. It\n  is read-only now, and a degraded session sets `GIT_TERMINAL_PROMPT=0` so git fails\n  rather than soliciting a credential that would be cached globally.\n- **#226** and **#230** are above, under what people get — both change behaviour\n  people will notice.\n- **A channel cannot outlive the process it was opened for**, found while replacing\n  the transport. Tauri sends `{ end: true }` when the Rust half is dropped and the JS\n  half unregisters its callback id, but the object survives and still serialises to\n  that id — so handing it to a second spawn invoked cleanly and every write was\n  dropped with a console warning. Since the restart button reuses the panel, a\n  restarted session would have printed nothing at all. One channel per spawn, with a\n  test that fails on the reused one.\n\n## Housekeeping, no behaviour attached\n\n- `Older(serde_json::Value)` in the legacy-shape reader warned as dead code,\n  correctly: the variant exists to swallow a shape and keep nothing of it, and a\n  `Value` nobody reads says the opposite. `IgnoredAny` is the type for that.\n- A `terminals.json` written before terminals became per-workspace still loads:\n  `active` was a bare session id where a map now is, and a tolerant deserializer\n  drops it rather than failing the whole file and taking every tab with it.\n- The diff drawer's manual checklist gains the one check jsdom cannot do — that the\n  layout snapshot a drag works from is never stale in a way a person can see.\n\n## Known, and tracked\n\nFound while building this, left out on purpose:\n\n- **#262** and **#263** are only half done, and deliberately so. Both were written\n  when the drawer lived on its own branch; that branch has since landed, so the\n  terminal drawer's grip is now in the same tree and *still* reads layout inside\n  `pointermove` and still sends a resize per pointer move. `src/drag.ts` and the PTY\n  throttle are in place and waiting for it — one gesture of that grip is still 81\n  pointer events producing 150 asks to repaint.\n- **#264** — the diff grid re-lays out in full whenever the pane's width changes,\n  which is the 34 ms that remain after the drag fix. **#265** revisits the\n  no-virtualisation decision now that the cost is known. Both under **#261**.\n- **#186** — the cursor half is fixed and the mechanism is understood; the cell-drift\n  half is not, and how any of this feels on a Mac has not been checked by hand.\n  **#266**, the spike on WebKitGTK's own knobs, stays open beside it.\n- **#269** — `Escape` inside a terminal unzooms the deck instead of reaching the\n  program. Always true of `claude` tiles; the drawer makes it impossible to ignore,\n  `Escape` being the most load-bearing key in `vim`, `less`, `htop` and `fzf`.\n- **#270** — `Shift+F6` moves to the previous region and the palette does not list\n  it, so it is documented nowhere.\n- **#250** — deleting a workspace warns about its scenarios but not about its running\n  sessions.\n\nStill open from v0.3.0: **#235** (the history screen reads an unreadable journal as\nan empty one), **#236** (no test covers that screen's boot wiring), **#249** (an\nunpinned scheduled scenario runs in whichever workspace happened to be active),\n**#255** (every modifier+key pair other than the three translated still collapses).\nFrom v0.2.0: **#199** (after `/clear`, restart resumes the pre-clear conversation),\n**#195** (a non-UTF-8 transcript reports zero tokens and no name, silently),\n**#194** (a renamed card tile loses the mark that says which card it is on).\n\n---\n\n## Install\n\n**macOS** — download the `.dmg` for your architecture (`aarch64` for\nApple Silicon, `x64` for Intel), drag the app to Applications, then\nclear the quarantine flag once:\n\n```\nxattr -cr /Applications/cowork-deck.app\n```\n\n**Linux** — download the `.AppImage`, `chmod +x` it and run, or\ninstall the `.deb`.\n\nThe app checks this page for updates on launch and installs them\nin place; the `xattr` step is first-install only.\n",
+      "downloads": [
+        {
+          "id": "macos-arm",
+          "label": "macOS · Apple silicon",
+          "name": "cowork-deck_0.4.0_aarch64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.4.0/cowork-deck_0.4.0_aarch64.dmg",
+          "size": 9466011
+        },
+        {
+          "id": "macos-intel",
+          "label": "macOS · Intel",
+          "name": "cowork-deck_0.4.0_x64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.4.0/cowork-deck_0.4.0_x64.dmg",
+          "size": 9640335
+        },
+        {
+          "id": "linux-appimage",
+          "label": "Linux · AppImage",
+          "name": "cowork-deck_0.4.0_amd64.AppImage",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.4.0/cowork-deck_0.4.0_amd64.AppImage",
+          "size": 88181240
+        },
+        {
+          "id": "linux-deb",
+          "label": "Linux · Debian and Ubuntu",
+          "name": "cowork-deck_0.4.0_amd64.deb",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.4.0/cowork-deck_0.4.0_amd64.deb",
+          "size": 11141038
+        },
+        {
+          "id": "linux-rpm",
+          "label": "Linux · Fedora and RHEL",
+          "name": "cowork-deck-0.4.0-1.x86_64.rpm",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.4.0/cowork-deck-0.4.0-1.x86_64.rpm",
+          "size": 11142437
+        }
+      ]
+    },
+    {
+      "tag": "v0.3.0",
+      "name": "cowork-deck v0.3.0",
+      "url": "https://github.com/followLemmi/cowork-deck/releases/tag/v0.3.0",
+      "publishedAt": "2026-08-12T12:54:31Z",
+      "prerelease": false,
+      "body": "A scenario used to leave nothing behind. `sessions.json` dropped the entry when\nthe tile closed, so a schedule that fired at 03:00 into a session nobody was\nthere to watch was unrecoverable by morning — the only surviving trace anywhere\nwas one row per scenario in `schedule_state.json`, written by the scheduler and\nonly for scheduled fires. This release gives scenario runs a journal and a\nscreen to read it on.\n\n## What people get\n\n**Scenario run history** (#217, in three parts: #218, #219, #220). Every run is\njournalled — how it started, how long it took, and the final assistant message —\nand a **History** screen beside Terminals / Board / Pull requests lists them\nnewest first, filterable by scenario and by trigger.\n\n- The journal is `runs.jsonl` in the app data dir, one appended line per event.\n  **Append-only**, because a store that truncates before it writes cannot be\n  trusted with a file written on every launch; **versioned per line**, because\n  after an upgrade the file physically holds lines from several app versions and\n  a header would lie about the ones below it.\n- Rows carry **snapshots**, not lookups: the name, icon, expanded prompt and\n  parameter values as they were. Renaming a scenario, deleting it, or deleting\n  its workspace cannot rewrite the past.\n- A row that produced nothing says **which** nothing it was — still running, no\n  session started (with the scheduler's reason), no transcript ever reported, or\n  the transcript is gone. Never an empty box: the run happening and the run\n  producing nothing are different facts. A conversation that was `/clear`ed\n  since says so out loud rather than presenting a stranger's tail as its result.\n- Three actions on a row, and deliberately no fourth. **Go to the session**\n  while it is still live, switching workspace first if it is running in another\n  one. **Re-run**, through the usual \"Launch parameters\" form with the recorded\n  values pre-filled and selected — never silent, because a scenario's parameters\n  may name a branch, a target or a person — and reconciled against the scenario\n  as it stands *now*, so a placeholder the prompt has since lost is dropped and\n  one it has gained comes up empty. **Reveal the transcript** in the file\n  manager, reveal only, never `open`: a `.jsonl` is not handed to whatever is\n  registered for it.\n- Where an action cannot work the control says why, on itself and in its\n  accessible name — a scenario that was deleted, a workspace that was, a\n  transcript that was never written. `aria-disabled` rather than `disabled`, so\n  the reason is reachable without a mouse.\n- **History is immutable.** No row can be edited or deleted; a journal whose\n  rows can be revised answers nothing. Erasing exists at one granularity —\n  a scenario's history wholesale, from the head of the screen while it is\n  narrowed to that scenario, so the rows it erases are the ones on screen.\n- Recording can be switched off, and the screen says so rather than looking\n  empty. Retention is the last 100 runs **per scenario**, pruned at app start —\n  a time window would keep three records for a monthly job and two thousand for\n  an hourly one.\n- The scenario's sidebar row grows a state dot for how its last run went, which\n  opens the history narrowed to that scenario. An indicator and nothing else —\n  that row has learned this lesson once already, when one ⏰ was both a status\n  badge and a real launch, and reaching for information started a session.\n\n**`Shift+Enter` writes a second line** (#234). It used to submit the\nhalf-written message. xterm maps `Enter` to a bare `CR` whatever modifiers are\nheld, so `Shift+Enter` reached `claude` byte-identical to `Enter` and `claude`\ndid the only thing a bare `CR` allows. The app is the terminal here, so it now\nmakes the binding every real terminal makes — the one `claude`'s own\n`/terminal-setup` writes into iTerm2 and VS Code: `ESC` + `CR`. `Alt/Option+Enter`\nand `Ctrl+Enter` map to the same newline, since neither can mean anything else\nand they are what a person tries next. Plain `Enter` still submits, and zoom\nkeeps its binding — `Cmd+Enter` on macOS, `Ctrl+Shift+Enter` on Windows and\nLinux.\n\n## Two defects fixed\n\n- **The status pill took the keyboard every five seconds** (#203) — and did it\n  precisely while a session sat waiting for an answer, which is the state the\n  pill exists to report. On macOS `show()` is `makeKeyAndOrderFront:`, and a\n  focusable window duly became the key window on every poll tick. The pill is\n  now built non-focusable, and the count is only emitted when it actually\n  changes. Typing into a terminal is no longer interrupted.\n- **`Open in browser` did nothing** (#252) — no browser, no navigation, no\n  feedback. A Tauri v2 webview has nowhere to open a `target=\"_blank\"` link, so\n  the navigation was simply dropped. Five other links were dead the same way:\n  the pull request row, the GitHub screen, links **and** images in rendered\n  markdown, the diff drawer, and a card. All six now go through one gate that\n  opens `http`/`https` in the system browser and refuses everything else. The\n  capability grants URL-opening scoped to those two schemes and nothing more —\n  a URL out of a pull request description must never be able to name a file to\n  run.\n\n## Housekeeping, no behaviour attached\n\n- **44 spec and plan documents retired** (#253) — the record of a workflow this\n  project no longer uses. Work is scoped in GitHub issues and decisions are\n  recorded in `docs/adr/`; a standalone spec was a third, unmaintained account\n  of intent. Four code comments that cited one for a measurement now state the\n  measurement inline.\n- **The first two ADRs** (#216) — how connected social accounts will hold\n  credentials, and who uses them over what. Both are inputs to #205; the\n  \"the app stores no tokens\" invariant is narrowed rather than deleted.\n- **Where agents look things up** (#202) — the issue tracker, the five canonical\n  triage labels, and the domain-doc layout, written down so a skill does not\n  guess and open a pull request against `main`.\n- The README gains the Features bullet the history screen shipped without.\n\n## Known, and tracked\n\nFound while building this, left out on purpose:\n\n- **#235** — the history screen reads an unreadable journal as an empty one.\n- **#236** — no test covers the history screen's boot-level wiring.\n- **#249** — an unpinned scheduled scenario runs in whichever workspace happened\n  to be active. The form says so; saying so is not the fix.\n- **#255** — every modifier+key pair *other* than the three now translated still\n  collapses. The real answer is negotiating the kitty keyboard protocol.\n\nStill open from v0.2.0: **#199** (after `/clear`, restart and auto-restore\nresume the pre-clear conversation), **#195** (a non-UTF-8 transcript reports\nzero tokens and no name, silently), **#194** (a renamed card tile loses the ☑\nthat says which card it is on).\n\n---\n\n## Install\n\n**macOS** — download the `.dmg` for your architecture (`aarch64` for\nApple Silicon, `x64` for Intel), drag the app to Applications, then\nclear the quarantine flag once:\n\n```\nxattr -cr /Applications/cowork-deck.app\n```\n\n**Linux** — download the `.AppImage`, `chmod +x` it and run, or\ninstall the `.deb`.\n\nThe app checks this page for updates on launch and installs them\nin place; the `xattr` step is first-install only.\n",
+      "downloads": [
+        {
+          "id": "macos-arm",
+          "label": "macOS · Apple silicon",
+          "name": "cowork-deck_0.3.0_aarch64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.3.0/cowork-deck_0.3.0_aarch64.dmg",
+          "size": 9380682
+        },
+        {
+          "id": "macos-intel",
+          "label": "macOS · Intel",
+          "name": "cowork-deck_0.3.0_x64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.3.0/cowork-deck_0.3.0_x64.dmg",
+          "size": 9550009
+        },
+        {
+          "id": "linux-appimage",
+          "label": "Linux · AppImage",
+          "name": "cowork-deck_0.3.0_amd64.AppImage",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.3.0/cowork-deck_0.3.0_amd64.AppImage",
+          "size": 88111608
+        },
+        {
+          "id": "linux-deb",
+          "label": "Linux · Debian and Ubuntu",
+          "name": "cowork-deck_0.3.0_amd64.deb",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.3.0/cowork-deck_0.3.0_amd64.deb",
+          "size": 11065882
+        },
+        {
+          "id": "linux-rpm",
+          "label": "Linux · Fedora and RHEL",
+          "name": "cowork-deck-0.3.0-1.x86_64.rpm",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.3.0/cowork-deck-0.3.0-1.x86_64.rpm",
+          "size": 11065506
+        }
+      ]
+    },
+    {
+      "tag": "v0.2.0",
+      "name": "cowork-deck v0.2.0",
+      "url": "https://github.com/followLemmi/cowork-deck/releases/tag/v0.2.0",
+      "publishedAt": "2026-08-08T00:30:27Z",
+      "prerelease": false,
+      "body": "## Install\n\n**macOS** — download the `.dmg` for your architecture (`aarch64` for\nApple Silicon, `x64` for Intel), drag the app to Applications, then\nclear the quarantine flag once:\n\n```\nxattr -cr /Applications/cowork-deck.app\n```\n\n**Linux** — download the `.AppImage`, `chmod +x` it and run, or\ninstall the `.deb`.\n\nThe app checks this page for updates on launch and installs them\nin place; the `xattr` step is first-install only.",
+      "downloads": [
+        {
+          "id": "macos-arm",
+          "label": "macOS · Apple silicon",
+          "name": "cowork-deck_0.2.0_aarch64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.2.0/cowork-deck_0.2.0_aarch64.dmg",
+          "size": 9249033
+        },
+        {
+          "id": "macos-intel",
+          "label": "macOS · Intel",
+          "name": "cowork-deck_0.2.0_x64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.2.0/cowork-deck_0.2.0_x64.dmg",
+          "size": 9396826
+        },
+        {
+          "id": "linux-appimage",
+          "label": "Linux · AppImage",
+          "name": "cowork-deck_0.2.0_amd64.AppImage",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.2.0/cowork-deck_0.2.0_amd64.AppImage",
+          "size": 87665144
+        },
+        {
+          "id": "linux-deb",
+          "label": "Linux · Debian and Ubuntu",
+          "name": "cowork-deck_0.2.0_amd64.deb",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.2.0/cowork-deck_0.2.0_amd64.deb",
+          "size": 10575694
+        },
+        {
+          "id": "linux-rpm",
+          "label": "Linux · Fedora and RHEL",
+          "name": "cowork-deck-0.2.0-1.x86_64.rpm",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.2.0/cowork-deck-0.2.0-1.x86_64.rpm",
+          "size": 10573747
+        }
+      ]
+    },
+    {
+      "tag": "v0.1.1",
+      "name": "cowork-deck v0.1.1",
+      "url": "https://github.com/followLemmi/cowork-deck/releases/tag/v0.1.1",
+      "publishedAt": "2026-08-07T15:46:07Z",
+      "prerelease": false,
+      "body": "## Install\n\n**macOS** — download the `.dmg` for your architecture (`aarch64` for\nApple Silicon, `x64` for Intel), drag the app to Applications, then\nclear the quarantine flag once:\n\n```\nxattr -cr /Applications/cowork-deck.app\n```\n\n**Linux** — download the `.AppImage`, `chmod +x` it and run, or\ninstall the `.deb`.\n\nThe app checks this page for updates on launch and installs them\nin place; the `xattr` step is first-install only.",
+      "downloads": [
+        {
+          "id": "macos-arm",
+          "label": "macOS · Apple silicon",
+          "name": "cowork-deck_0.1.1_aarch64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.1.1/cowork-deck_0.1.1_aarch64.dmg",
+          "size": 9209930
+        },
+        {
+          "id": "macos-intel",
+          "label": "macOS · Intel",
+          "name": "cowork-deck_0.1.1_x64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.1.1/cowork-deck_0.1.1_x64.dmg",
+          "size": 9366330
+        },
+        {
+          "id": "linux-appimage",
+          "label": "Linux · AppImage",
+          "name": "cowork-deck_0.1.1_amd64.AppImage",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.1.1/cowork-deck_0.1.1_amd64.AppImage",
+          "size": 87632376
+        },
+        {
+          "id": "linux-deb",
+          "label": "Linux · Debian and Ubuntu",
+          "name": "cowork-deck_0.1.1_amd64.deb",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.1.1/cowork-deck_0.1.1_amd64.deb",
+          "size": 10544722
+        },
+        {
+          "id": "linux-rpm",
+          "label": "Linux · Fedora and RHEL",
+          "name": "cowork-deck-0.1.1-1.x86_64.rpm",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.1.1/cowork-deck-0.1.1-1.x86_64.rpm",
+          "size": 10545846
+        }
+      ]
+    },
+    {
+      "tag": "v0.1.0",
+      "name": "cowork-deck v0.1.0",
+      "url": "https://github.com/followLemmi/cowork-deck/releases/tag/v0.1.0",
+      "publishedAt": "2026-08-07T15:08:04Z",
+      "prerelease": false,
+      "body": "## Install\n\n**macOS** — download the `.dmg` for your architecture (`aarch64` for\nApple Silicon, `x64` for Intel), drag the app to Applications, then\nclear the quarantine flag once:\n\n```\nxattr -cr /Applications/cowork-deck.app\n```\n\n**Linux** — download the `.AppImage`, `chmod +x` it and run, or\ninstall the `.deb`.\n\nThe app checks this page for updates on launch and installs them\nin place; the `xattr` step is first-install only.",
+      "downloads": [
+        {
+          "id": "macos-arm",
+          "label": "macOS · Apple silicon",
+          "name": "cowork-deck_0.1.0_aarch64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.1.0/cowork-deck_0.1.0_aarch64.dmg",
+          "size": 9241995
+        },
+        {
+          "id": "macos-intel",
+          "label": "macOS · Intel",
+          "name": "cowork-deck_0.1.0_x64.dmg",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.1.0/cowork-deck_0.1.0_x64.dmg",
+          "size": 9350974
+        },
+        {
+          "id": "linux-appimage",
+          "label": "Linux · AppImage",
+          "name": "cowork-deck_0.1.0_amd64.AppImage",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.1.0/cowork-deck_0.1.0_amd64.AppImage",
+          "size": 87640568
+        },
+        {
+          "id": "linux-deb",
+          "label": "Linux · Debian and Ubuntu",
+          "name": "cowork-deck_0.1.0_amd64.deb",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.1.0/cowork-deck_0.1.0_amd64.deb",
+          "size": 10540280
+        },
+        {
+          "id": "linux-rpm",
+          "label": "Linux · Fedora and RHEL",
+          "name": "cowork-deck-0.1.0-1.x86_64.rpm",
+          "url": "https://github.com/followLemmi/cowork-deck/releases/download/v0.1.0/cowork-deck-0.1.0-1.x86_64.rpm",
+          "size": 10541352
+        }
+      ]
+    }
+  ]
+}

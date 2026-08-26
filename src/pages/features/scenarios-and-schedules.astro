@@ -1,0 +1,68 @@
+---
+import Feature from '../../layouts/Feature.astro'
+---
+
+<Feature slug="scenarios-and-schedules">
+  <h2>A scenario is a prompt with a name</h2>
+  <p>
+    Save the prompt you keep retyping, give it a name, and it becomes one press.
+    A scenario can be pinned to a single workspace or offered in all of them.
+  </p>
+  <p>
+    Each distinct <code>{'{{name}}'}</code> in the prompt becomes a field in a
+    small form at launch; a prompt with no placeholders asks nothing and starts
+    immediately. Placeholder names are matched by <em>letter</em> rather than by
+    ASCII, so a prompt written in any script names its fields in that script —
+    a small decision with an obvious reason: a prompt is written in whatever
+    language its author thinks in, and the interface's language does not get a
+    vote.
+  </p>
+
+  <h2>Schedules run on your machine, through your Claude Code</h2>
+  <p>
+    Attach a schedule — hourly, daily at <code>HH:MM</code>, or weekly — and the
+    scenario fires unattended into a fresh session using its stored defaults.
+  </p>
+  <p>
+    <strong>There is no cloud agent involved and no extra bill.</strong> The run
+    happens locally, through the <code>claude</code> you already pay for, with
+    your full local context, your files, and your permissions. That is a
+    different proposition from a hosted agent: cheaper, private by
+    construction, and able to touch things that only exist on your disk.
+  </p>
+  <p>
+    A scenario whose previous run is still working or still waiting is
+    <em>skipped</em> rather than stacked. Two of the same job running at once is
+    never what was wanted.
+  </p>
+
+  <h2>What happens to a missed run</h2>
+  <p>
+    Sessions are children of the app, so the scheduler only fires while the
+    window is open — an honest limit rather than a hidden one. Missed runs are
+    not silently lost: each scheduled scenario <strong>catches up once</strong>
+    on the next launch. Once, not five times, because a machine that was closed
+    for a week does not want seven backfilled jobs at breakfast.
+  </p>
+
+  <h2>The journal</h2>
+  <p>
+    Every run is recorded: how it started, how long it took, and its final
+    message. The journal lists them newest first, filterable by scenario and by
+    trigger. A row that produced nothing says <em>which</em> nothing it was.
+  </p>
+  <p>
+    Records are immutable. Erasing exists at exactly one granularity — one
+    scenario's history, wholesale — because per-row deletion turns a log into a
+    thing you edit until it says what you would prefer. Recording can be turned
+    off entirely, and when it is off the screen says so rather than looking
+    empty.
+  </p>
+
+  <h2>Broadcast</h2>
+  <p>
+    Related, and much simpler: broadcast types one thing into several live
+    sessions at once. Useful for the instruction you find yourself giving five
+    agents in a row.
+  </p>
+</Feature>

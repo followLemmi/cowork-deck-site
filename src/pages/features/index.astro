@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro'
+import { FEATURES } from '../../data/features'
+import { breadcrumbs } from '../../data/schema'
+---
+
+<Base
+  title="Features"
+  description="What cowork-deck does that a window full of terminals does not: live session state, an account per workspace, boards that launch sessions, and schedules."
+  schema={breadcrumbs([
+    { name: 'cowork-deck', path: '/' },
+    { name: 'Features', path: '/features/' },
+  ])}
+>
+  <div class="wrap section">
+    <p class="eyebrow">Features</p>
+    <h1>Everything the deck does</h1>
+    <p class="lede" style="max-width: 56ch">
+      Six capabilities, each one a thing a terminal, a tab strip or a
+      multiplexer cannot do for you — because none of them knows what an agent
+      session is.
+    </p>
+
+    <div class="grid grid--2" style="margin-top: 3rem">
+      {
+        FEATURES.map((f) => (
+          <a class="island card feature-card" href={`/features/${f.slug}/`}>
+            <h2>{f.title}</h2>
+            <p>{f.summary}</p>
+            <span class="feature-card__more">Read more</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Base>
+
+<style>
+  .feature-card { display: block; text-decoration: none; }
+  .feature-card h2 { font-size: 1.125rem; margin: 0 0 0.5rem; }
+  .feature-card p { color: var(--fg-mid); font-size: 1rem; margin: 0; }
+  .feature-card:hover { border-color: var(--line-strong); }
+  .feature-card__more {
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-size: 0.9375rem;
+    color: var(--fg-dim);
+  }
+  .feature-card:hover .feature-card__more { color: var(--fg); }
+</style>

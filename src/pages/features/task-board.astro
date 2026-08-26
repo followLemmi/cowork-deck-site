@@ -1,0 +1,90 @@
+---
+import Feature from '../../layouts/Feature.astro'
+---
+
+<Feature slug="task-board">
+  <h2>Two sources, never both</h2>
+  <p>
+    Every workspace can have a board, and it reads from exactly one of two
+    places. Picking one is a deliberate constraint: a board that merged
+    markdown cards with GitHub issues would have two answers to “where does a
+    new card go”.
+  </p>
+
+  <h3>Markdown cards in a folder</h3>
+  <p>
+    Cards are markdown files under <code>.cowork/tasks/</code>, or any folder
+    you point at — a dedicated repository, an Obsidian vault, a directory
+    already synced by something else. They are ordinary files: readable,
+    diffable, and yours if you uninstall the app.
+  </p>
+  <p>
+    The steps and the card kinds live in a <code>board.json</code> beside them,
+    so one project runs
+    <code>backlog / todo / doing / shipped</code> and the next just
+    <code>open / done</code>. Nothing about the column names is baked into the
+    app.
+  </p>
+
+  <h3>Or the repository's own GitHub issues</h3>
+  <p>
+    Point the board at the repository instead and it reads the issues under
+    <a href="/features/github-account-per-workspace/">that workspace's GitHub
+    account</a>, filtered by state and by label. Issues open as documents — the
+    body rendered, the labels and the link to GitHub beside it — rather than as
+    a modal with a text field in it.
+  </p>
+
+  <h2>▶ turns a card into a session</h2>
+  <p>
+    This is the part that makes it a board rather than a list. Press play on a
+    card and cowork-deck starts a session with that card as its prompt. On a
+    GitHub issue, ▶ goes further: a new branch, in a worktree of its own, so the
+    session works beside your checkout rather than inside it. ✓ closes the
+    issue, after asking.
+  </p>
+
+  <h2>“In progress” is derived, never stored</h2>
+  <p>
+    A card shows as being worked on because a live session is running on it —
+    not because someone dragged it into a column. When the session ends, the
+    marker goes with it.
+  </p>
+  <p>
+    This is the answer to the oldest failure of every board anyone has ever
+    used: a column full of things nobody is doing, because moving a card out is
+    a separate act of discipline that nobody performs. Here there is nothing to
+    move.
+  </p>
+
+  <h2>Filing a card without leaving the deck</h2>
+  <p>
+    <kbd>Cmd/Ctrl+Shift+T</kbd> files a card from anywhere in the app. More
+    interestingly, <strong>sessions file their own</strong>: a bundled
+    <code>cowork_task</code> CLI is on the session's path, so an agent that
+    notices something out of scope can write a ticket instead of either
+    forgetting it or expanding the job it was given.
+  </p>
+  <p>
+    That is a small mechanism with a disproportionate effect on how a long
+    session behaves. Scope creep is usually a side finding with nowhere to go.
+  </p>
+
+  <h2>Where the board opens</h2>
+  <p>
+    The board belongs to <em>one repository</em>, so it is not in the app's rail
+    with the global things. It opens from that repository's own row, into a
+    panel on the other side of the deck — and the deck never leaves the window.
+  </p>
+</Feature>
+
+<style>
+  kbd {
+    font-family: var(--ff-mono);
+    font-size: 0.8125em;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 0.1em 0.35em;
+    background: var(--bg-inset);
+  }
+</style>

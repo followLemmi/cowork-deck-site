@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro'
+---
+
+<Base
+  title="Page not found"
+  description="That page does not exist on coworkdeck.dev."
+  noindex={true}
+>
+  <div class="wrap section">
+    <p class="eyebrow">404</p>
+    <h1>That page is not here.</h1>
+    <p class="lede" style="max-width: 46ch">
+      It may have moved, or it may never have existed. Both happen.
+    </p>
+    <ul class="links">
+      <li><a href="/">The front page</a></li>
+      <li><a href="/features/">What cowork-deck does</a></li>
+      <li><a href="/install/">Download and install</a></li>
+      <li><a href="/faq/">Frequently asked questions</a></li>
+      <li><a href="/changelog/">Changelog</a></li>
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .links { list-style: none; padding: 0; margin-top: 2rem; }
+  .links li { margin-bottom: 0.6rem; }
+</style>

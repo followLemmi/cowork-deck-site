@@ -1,0 +1,66 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # The changelog and the download links are baked in at build time, so a new
+  # release in the application repository has to trigger a rebuild here. Two
+  # ways in: a nightly run that needs nobody, and a manual one for when you do
+  # not want to wait for it.
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+  # Fired by the application repository's release workflow, when a token for it
+  # exists. Optional: the nightly run is the floor.
+  repository_dispatch:
+    types: [release-published]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# A queued deploy replaces the one waiting, never cancels the one running.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # `npm run build` fetches the releases first. The token is only there to
+      # lift the unauthenticated API's 60-requests-an-hour limit; the build
+      # falls back to the committed copy of releases.json if the call fails, so
+      # a rate limit is a stale changelog rather than a red build.
+      - name: Build
+        run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check the build for the mistakes that cost rankings
+        run: node scripts/check-seo.mjs
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

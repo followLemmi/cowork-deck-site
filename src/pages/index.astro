@@ -1,0 +1,280 @@
+---
+import Base from '../layouts/Base.astro'
+import { SITE } from '../data/site'
+import { FEATURES } from '../data/features'
+import { softwareApplication, website, faqPage } from '../data/schema'
+
+/* Three questions, answered here as well as on /faq/. They are on the front
+   page because they are the three a person asks before downloading, and in the
+   FAQPage node because they are also what someone types into a search box. */
+const frontFaq = [
+  {
+    q: 'Do I need an API key or a subscription to use cowork-deck?',
+    a: 'No. cowork-deck runs the Claude Code you already have installed, on your own machine, under your own plan. It adds no account, no server and no cost of its own.',
+  },
+  {
+    q: 'How many Claude Code sessions can run at the same time?',
+    a: 'As many as your machine and your plan allow. The app itself uses around 100 MB of memory; each session is an ordinary claude process in a PTY, costing what it would cost in a terminal.',
+  },
+  {
+    q: 'Is cowork-deck free and open source?',
+    a: 'Yes. It is MIT-licensed and the whole application is in a public GitHub repository, including the screenshot harness the images on this site were shot with.',
+  },
+]
+---
+
+<Base
+  title="Run many Claude Code sessions at once"
+  description={SITE.description}
+  image="/og/default.png"
+  schema={[softwareApplication, website, faqPage(frontFaq)]}
+>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Free · Open source · macOS and Linux</p>
+      <h1>Run many Claude&nbsp;Code sessions at once.</h1>
+      <p class="lede hero__lede">
+        cowork-deck is a desktop app that gives every session a tile with a real
+        terminal in it, and answers one question at a glance:
+        <em>which of these needs me?</em>
+      </p>
+
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="/install/">Download</a>
+        <a class="btn btn--ghost" href={SITE.repo} rel="noopener">Source on GitHub</a>
+      </div>
+
+      <p class="hero__states">
+        <span class="state state--working">working</span>
+        <span class="state state--waiting">waiting on you</span>
+        <span class="state state--error">stopped on an error</span>
+      </p>
+
+      <figure class="hero__shot">
+        <img
+          src="/img/deck.webp"
+          width="1600"
+          height="857"
+          alt="Five Claude Code sessions as tiles in one cowork-deck window — one working, one waiting for a decision, one finished, one stopped on an error, one idle — beside a panel holding workspaces and their sessions as one tree."
+          fetchpriority="high"
+        />
+        <figcaption>
+          Five sessions, five states, one glance. The bar down the left edge of
+          each tile is its state, so a dozen sessions read in one sweep instead
+          of a dozen labels. The two readings in the top bar count the only two
+          things that want a person.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">The problem</p>
+      <h2>A window full of terminals does not tell you which one is stuck.</h2>
+      <div class="grid grid--3">
+        <div class="island card">
+          <h3>Tabs hide state</h3>
+          <p>
+            A tab strip shows names, not states. The session that has been
+            parked on a permission prompt for eleven minutes looks exactly like
+            the one that is working.
+          </p>
+        </div>
+        <div class="island card">
+          <h3>tmux does not know what an agent is</h3>
+          <p>
+            A multiplexer splits panes. It has no idea that one of them finished
+            a turn, that another is blocked on a decision, or what any of them
+            has cost so far.
+          </p>
+        </div>
+        <div class="island card">
+          <h3>One account at a time</h3>
+          <p>
+            <code>gh auth switch</code> is global. Two projects on two GitHub
+            accounts means switching, remembering to switch back, and eventually
+            pushing as the wrong person.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Half a minute of the real thing</p>
+      <h2>The deck never leaves the window.</h2>
+      <p class="lede">
+        A session finishes its turn and its rail changes live. One tile zooms
+        near-full while the rest fall into a filmstrip. A workspace's board
+        lists its repository's issues; a pull request unfolds into its diff.
+      </p>
+      <figure class="demo">
+        <video
+          controls
+          muted
+          loop
+          playsinline
+          preload="none"
+          poster="/img/demo-poster.webp"
+          width="880"
+          height="494"
+          aria-label="Screen recording of cowork-deck: a working session finishes its turn and its rail changes live, one tile zooms near-full while the rest become a filmstrip, a workspace's board lists its repository's issues, and a pull request unfolds into its diff."
+        >
+          <source src="/img/demo.webm" type="video/webm" />
+          <source src="/img/demo.mp4" type="video/mp4" />
+        </video>
+        <figcaption>
+          Recorded against the project's screenshot harness, so every account,
+          repository and path on screen is invented fixture data.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="wrap">
+      <p class="eyebrow">What it does</p>
+      <h2>Six things a terminal cannot do for you.</h2>
+      <div class="grid grid--2">
+        {
+          FEATURES.map((f) => (
+            <a class="island card feature-card" href={`/features/${f.slug}/`}>
+              <h3>{f.title}</h3>
+              <p>{f.summary}</p>
+              <span class="feature-card__more">Read more</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Getting started</p>
+      <h2>Three steps, and none of them is an account.</h2>
+      <ol class="steps">
+        <li>
+          <strong>Install Claude Code</strong> and log in as you normally would.
+          cowork-deck runs the <code>claude</code> already on your machine.
+        </li>
+        <li>
+          <strong>Download the app</strong> — a <code>.dmg</code> for macOS, an
+          AppImage, <code>.deb</code> or <code>.rpm</code> for Linux. Windows
+          means building from source for now.
+        </li>
+        <li>
+          <strong>Point a workspace at a project folder.</strong> The first
+          session starts there. Everything else — accounts, boards, scenarios —
+          is optional and off until you turn it on.
+        </li>
+      </ol>
+      <p>
+        <a class="btn btn--primary" href="/install/">Installation guide</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Before you download</p>
+      <h2>Three questions worth answering first.</h2>
+      <div class="faq">
+        {
+          frontFaq.map((item) => (
+            <div class="faq__item">
+              <h3>{item.q}</h3>
+              <p>{item.a}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p><a href="/faq/">Every other question →</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding: clamp(3rem, 7vw, 5.5rem) 0 0;
+    background:
+      radial-gradient(
+        90rem 40rem at 50% -12rem,
+        rgba(246, 247, 249, 0.05),
+        transparent 65%
+      );
+  }
+  .hero h1 { max-width: 18ch; }
+  .hero__lede { max-width: 54ch; margin-bottom: 2rem; }
+  .hero__lede em { font-style: italic; color: var(--fg); }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .hero__states {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.35rem;
+    margin: 1.75rem 0 0;
+  }
+  .hero__shot { margin-top: 3rem; margin-bottom: 0; }
+
+  .demo video {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--sh-float);
+    background: var(--bg-island);
+  }
+
+  .feature-card {
+    display: block;
+    text-decoration: none;
+    transition: border-color 0.12s ease, background-color 0.12s ease;
+  }
+  .feature-card:hover {
+    border-color: var(--line-strong);
+    background: color-mix(in srgb, var(--bg-island) 82%, var(--fg) 3%);
+  }
+  .feature-card__more {
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-size: 0.9375rem;
+    color: var(--fg-dim);
+  }
+  .feature-card:hover .feature-card__more { color: var(--fg); }
+
+  .steps {
+    list-style: none;
+    counter-reset: step;
+    padding: 0;
+    margin: 2rem 0;
+    max-width: var(--measure);
+  }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 2.75rem;
+    margin-bottom: 1.25rem;
+    color: var(--fg-mid);
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.1rem;
+    width: 1.85rem;
+    height: 1.85rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    font-family: var(--ff-display);
+    font-size: 0.875rem;
+    color: var(--fg);
+  }
+
+  .faq__item { border-top: 1px solid var(--line); padding: 1.5rem 0; }
+  .faq__item h3 { margin-bottom: 0.5rem; font-size: 1.0625rem; }
+  .faq__item p { color: var(--fg-mid); margin-bottom: 0; }
+</style>

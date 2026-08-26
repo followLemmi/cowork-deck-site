@@ -1,0 +1,106 @@
+---
+import Feature from '../../layouts/Feature.astro'
+---
+
+<Feature slug="multiple-claude-code-sessions">
+  <h2>The short answer</h2>
+  <p>
+    Open cowork-deck, point a workspace at a project folder, and press
+    <em>New session</em> as many times as you have work. Each press starts a
+    real <code>claude</code> process in a PTY and gives it a tile. There is no
+    limit in the app: the ceiling is your machine and your Claude plan, not a
+    licence.
+  </p>
+  <p>
+    What makes a dozen of them usable is not the grid. It is that the app knows
+    what each one is doing.
+  </p>
+
+  <h2>State, as a colour along one edge</h2>
+  <p>
+    Claude Code reports its own lifecycle through hooks. cowork-deck listens,
+    and turns what it hears into a rail down the left edge of every tile:
+  </p>
+  <ul>
+    <li><span class="state state--working">working</span> — a turn is in flight.</li>
+    <li>
+      <span class="state state--waiting">waiting on you</span> — blocked on a
+      permission request, and going nowhere until someone answers.
+    </li>
+    <li>
+      <span class="state">finished a turn</span> — parked at the prompt, done,
+      wanting nothing.
+    </li>
+    <li>
+      <span class="state state--error">stopped on an error</span> — and the tile
+      says which.
+    </li>
+  </ul>
+  <p>
+    <strong>“Finished” and “waiting” are deliberately separate.</strong> An
+    interactive <code>claude</code> sits at its prompt when it has finished,
+    which looks identical to sitting at a permission prompt and is the opposite
+    situation. Conflating them is what makes a tab strip useless at ten
+    sessions: you cannot tell the session that is done from the one that has
+    been stuck for eleven minutes.
+  </p>
+  <p>
+    The top bar reduces the whole deck to two numbers — how many are waiting
+    for a decision, how many stopped on an error. Each number opens one of the
+    sessions it counted. A run that finished while nobody was watching is not in
+    it, because it does not want anything.
+  </p>
+
+  <h2>Sessions that name themselves</h2>
+  <p>
+    Six rows reading <code>session · myproject</code> are six rows you cannot
+    tell apart. A session started with no scenario takes its name from Claude
+    Code's own transcript, so the list reads as topics instead. The name says
+    what the conversation <em>started</em> as; <kbd>F2</kbd> renames any tile,
+    and emptying the field hands the automatic name back.
+  </p>
+
+  <h2>Zoom, and the filmstrip</h2>
+  <p>
+    Double-click a tile's header and it takes the window; the rest fall into a
+    filmstrip of cards below it. The cards deliberately carry no terminal — at
+    that size a terminal is texture, not information — so the space goes to the
+    four things worth knowing about a session you are not currently reading:
+    its name, its state, its branch, and what it has spent.
+  </p>
+
+  <h2>Nothing is torn down without asking</h2>
+  <p>
+    Quitting names the sessions that still have something running and waits.
+    What gets killed is the whole process session, so an <code>npm run
+    build</code> started inside a shell dies with it rather than outliving the
+    app. Restart resumes the conversation with <code>claude --resume</code>, and
+    yesterday's tiles come back on the next launch.
+  </p>
+  <p>
+    Sessions are children of the app: there is no detached mode, and the
+    scheduler only fires while the window is open. That is a deliberate limit,
+    not an oversight — see
+    <a href="/features/scenarios-and-schedules/">scenarios and schedules</a> for
+    what happens to a run that was missed.
+  </p>
+
+  <h2>If the hooks do not fire</h2>
+  <p>
+    On an older <code>claude</code>, or if a hook fails, the terminal is
+    unaffected: you type, scroll and work normally. The only symptom is a tile
+    whose state label stays on <code>idle</code>. Nothing about the session
+    depends on the state tracking working.
+  </p>
+</Feature>
+
+<style>
+  kbd {
+    font-family: var(--ff-mono);
+    font-size: 0.8125em;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 0.1em 0.35em;
+    background: var(--bg-inset);
+  }
+</style>

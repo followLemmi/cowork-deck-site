@@ -1,0 +1,74 @@
+---
+import Feature from '../../layouts/Feature.astro'
+---
+
+<Feature slug="github-issues-and-pull-requests">
+  <h2>Issues, as documents</h2>
+  <p>
+    A workspace's board can read its repository's GitHub issues directly, under
+    <a href="/features/github-account-per-workspace/">that workspace's own
+    account</a>. Rows are deep enough to show an excerpt of the body, filtered
+    by state and by label, and opening one gives you the issue as a document:
+    the body rendered, the labels and the link to GitHub beside it.
+  </p>
+  <p>
+    ▶ on an issue opens a session on a new branch, in a worktree of its own. ✓
+    closes the issue, after asking.
+  </p>
+
+  <h2>Pull requests, with the four check states kept apart</h2>
+  <p>
+    Pull requests list under the same account, each carrying its checks, its
+    review verdict, and how long ago it last moved.
+  </p>
+  <p>
+    <strong>Four check states are distinguished, and “no checks” is never shown
+    as success.</strong> That distinction is the whole reason to render this
+    list rather than link to it: a green tick that actually means “nothing ran”
+    is worse than no tick at all, and it is a mistake most compact PR views
+    make.
+  </p>
+
+  <h2>The diff, in the same window</h2>
+  <p>
+    A pull request unfolds into its diff inside the workspace panel: two sticky
+    line-number columns, <code>+</code> and <code>−</code> markers of their own,
+    and added and removed bands behind them.
+  </p>
+  <p>
+    Colour is the third channel here, never the channel. The two bands measure
+    roughly 1.0 against each other in contrast, so the literal <code>+</code>
+    and <code>−</code> do the work — which means the diff still reads for
+    someone who cannot tell the two bands apart. More about that reasoning on
+    <a href="/design/">the design page</a>.
+  </p>
+
+  <h2>Merge is pinned to what was on screen</h2>
+  <p>
+    When you merge, the app merges the commit you were looking at. If the branch
+    moved since the last refresh, the merge is <em>refused</em> and you are asked
+    to look again.
+  </p>
+  <p>
+    This is not caution for its own sake. A merge button that silently merges
+    whatever is newest is a button that merges code you have never seen,
+    which — with agents pushing to branches unattended — stops being a
+    theoretical concern.
+  </p>
+
+  <h2>▶ on a pull request</h2>
+  <p>
+    Starting a session on a pull request checks its branch out in a worktree
+    <em>beside</em> the workspace, never inside it. Your own checkout keeps
+    whatever branch you left it on; the session gets a clean tree of its own.
+  </p>
+
+  <h2>What this needs</h2>
+  <p>
+    The <a href="https://cli.github.com/" rel="noopener">GitHub CLI</a>, logged
+    in, and a workspace bound to an account. Without a binding the board falls
+    back to
+    <a href="/features/task-board/">markdown cards</a>, which need nothing at
+    all.
+  </p>
+</Feature>

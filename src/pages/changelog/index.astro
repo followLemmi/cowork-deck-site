@@ -1,0 +1,98 @@
+---
+import Base from '../../layouts/Base.astro'
+import { SITE } from '../../data/site'
+import { breadcrumbs } from '../../data/schema'
+import { firstParagraph } from '../../data/markdown'
+import data from '../../data/releases.json'
+
+const releases = data.releases
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+---
+
+<Base
+  title="Changelog"
+  description="Every cowork-deck release, what shipped in it and why — from the first version to the current one. Also available as an RSS feed."
+  schema={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'cowork-deck changelog',
+      url: `${SITE.url}/changelog/`,
+      description: 'Release notes for every version of cowork-deck.',
+      isPartOf: { '@id': `${SITE.url}/#website` },
+      about: { '@id': `${SITE.url}/#app` },
+    },
+    breadcrumbs([
+      { name: 'cowork-deck', path: '/' },
+      { name: 'Changelog', path: '/changelog/' },
+    ]),
+  ]}
+>
+  <div class="wrap section">
+    <p class="eyebrow">Changelog</p>
+    <h1>What has shipped</h1>
+    <p class="lede" style="max-width: 54ch">
+      Every release, with the reasoning rather than a list of commit subjects.
+      Also an <a href="/rss.xml">RSS feed</a>, if you would rather be told.
+    </p>
+
+    <ol class="releases">
+      {
+        releases.map((r) => (
+          <li class="island release">
+            <div class="release__head">
+              <h2>
+                <a href={`/changelog/${r.tag}/`}>{r.tag}</a>
+              </h2>
+              <time datetime={r.publishedAt}>{fmt(r.publishedAt)}</time>
+              {r.prerelease && <span class="release__pre">pre-release</span>}
+            </div>
+            <p>{firstParagraph(r.body)}</p>
+            <p class="release__links">
+              <a href={`/changelog/${r.tag}/`}>Release notes</a>
+              <a href={r.url} rel="noopener">On GitHub</a>
+              {r.downloads.length > 0 && <a href="/install/">Download</a>}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Base>
+
+<style>
+  .releases { list-style: none; padding: 0; margin: 3rem 0 0; max-width: var(--measure); }
+  .release { padding: 1.5rem 1.75rem; margin-bottom: 1.25rem; }
+  .release__head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .release h2 { margin: 0; font-size: 1.375rem; }
+  .release h2 a { text-decoration: none; }
+  .release h2 a:hover { text-decoration: underline; }
+  .release time {
+    font-family: var(--ff-mono);
+    font-size: 0.8125rem;
+    color: var(--fg-dim);
+  }
+  .release__pre {
+    font-family: var(--ff-mono);
+    font-size: 0.75rem;
+    color: var(--st-waiting);
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    padding: 0.05rem 0.35rem;
+  }
+  .release p { color: var(--fg-mid); }
+  .release__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin: 1rem 0 0;
+    font-size: 0.9375rem;
+  }
+</style>

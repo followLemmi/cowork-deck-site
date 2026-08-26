@@ -1,0 +1,254 @@
+---
+import Base from '../layouts/Base.astro'
+import { SITE } from '../data/site'
+import { breadcrumbs, techArticle } from '../data/schema'
+
+/* The palette, with the numbers that justify it. Every hex here is the one the
+   app ships, generated from an OKLch source by the project's own
+   `tools/palette.mjs`. */
+const surfaces = [
+  { token: '--bg-void', hex: '#040405', note: 'The stage. Everything floats on this.' },
+  { token: '--bg-chrome', hex: '#0b0c0d', note: 'The top bar, which gives the window a top edge.' },
+  { token: '--bg-island', hex: '#161719', note: 'A raised content surface.' },
+  { token: '--bg-inset', hex: '#28282a', note: 'A field or control sunk into an island.' },
+]
+const ink = [
+  { token: '--fg', hex: '#f6f7f9', note: 'Text, and the accent — they are the same value.' },
+  { token: '--fg-mid', hex: '#b9babd', note: 'Secondary text.' },
+  { token: '--fg-dim', hex: '#9a9c9f', note: 'Captions and metadata.' },
+  { token: '--line', hex: '#2d2e30', note: 'A hairline between surfaces.' },
+]
+const states = [
+  { token: '--st-working', hex: '#7bd77f', label: 'working' },
+  { token: '--st-waiting', hex: '#efc845', label: 'waiting on you' },
+  { token: '--st-error', hex: '#fb817a', label: 'stopped on an error' },
+]
+---
+
+<Base
+  title="True Ink — the design system behind cowork-deck"
+  description="A near-black interface where hue belongs to state, elevation is lightness rather than shadow, and every colour pair is measured by a test that fails the build."
+  schema={[
+    techArticle({
+      headline: 'True Ink — the design system behind cowork-deck',
+      description:
+        'Four decisions behind a dark interface for a window full of agent sessions: a nearly absent cool cast, elevation as lightness, light as the accent, and a terminal that deliberately does not follow the palette.',
+      path: '/design/',
+    }),
+    breadcrumbs([
+      { name: 'cowork-deck', path: '/' },
+      { name: 'Design', path: '/design/' },
+    ]),
+  ]}
+>
+  <div class="wrap section">
+    <p class="eyebrow">Design</p>
+    <h1>True Ink</h1>
+    <p class="lede" style="max-width: 56ch">
+      A window holding twelve agent sessions has one job before it has any
+      others: to say which of them needs a person. That constraint decided the
+      whole palette, and it decided it in one sentence — <strong>hue belongs to
+      state</strong>.
+    </p>
+
+    <div class="prose">
+      <h2>1 · Hue belongs to state, so the accent is light</h2>
+      <p>
+        Green, amber and red mean working, waiting on you, and broken. They are
+        never spent on decoration, which leaves the interface with no colour to
+        be branded in — so the accent became light itself.
+        <code>--accent</code> resolves to the same value as <code>--fg</code>.
+      </p>
+      <p>
+        That is not a collision waiting to be fixed. It has one visible
+        consequence worth knowing before someone files it as a bug: a primary
+        button is the ground and the ink inverted, so it reads as a switch that
+        has been thrown rather than as a coloured call to action. For the
+        actions this app has — <em>start</em>, <em>merge</em>, <em>close</em> —
+        that is the right reading.
+      </p>
+
+      <div class="swatches" role="list">
+        {
+          states.map((s) => (
+            <div class="swatch swatch--state" role="listitem">
+              <span class="swatch__chip" style={`background:${s.hex}`}></span>
+              <code>{s.token}</code>
+              <span class="swatch__hex">{s.hex}</span>
+              <span class="swatch__note">{s.label}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <h2>2 · Elevation is lightness, not shadow</h2>
+      <p>
+        <code>--bg-void</code> resolves to <code>#040405</code>. Four units of
+        brightness remain below it and no amount of black can reach them — so on
+        this ground a cast shadow is a declaration that does nothing. An earlier
+        pass spent a 30px drop shadow at 75% black on every surface and got a
+        flat interface whose stylesheet claimed otherwise.
+      </p>
+      <p>
+        The step from stage to raised surface does that work instead:
+        <strong>0.097 in L</strong>, twice what the previous ladder spent. The
+        edge is paid for by a lit hairline along the top at 7.5% white, plus a
+        two-pixel <em>contact</em> shadow — the one part of a shadow that still
+        reads on near-black, because it is the line where an object meets what it
+        lies on.
+      </p>
+
+      <div class="swatches" role="list">
+        {
+          surfaces.map((s) => (
+            <div class="swatch" role="listitem">
+              <span class="swatch__chip" style={`background:${s.hex}`}></span>
+              <code>{s.token}</code>
+              <span class="swatch__hex">{s.hex}</span>
+              <span class="swatch__note">{s.note}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <p>
+        The three names carry the elevation itself, and the ladder is spaced by
+        what has to be <em>distinguishable</em> rather than by even steps:
+        <code>--bg-inset</code> sits 0.073 above <code>--bg-island</code>
+        because a field is recognised by its fill, not by its border.
+      </p>
+
+      <div class="swatches" role="list">
+        {
+          ink.map((s) => (
+            <div class="swatch" role="listitem">
+              <span class="swatch__chip" style={`background:${s.hex}`}></span>
+              <code>{s.token}</code>
+              <span class="swatch__hex">{s.hex}</span>
+              <span class="swatch__note">{s.note}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <h2>3 · The cast is cool, and almost absent</h2>
+      <p>
+        OKLch hue 265 at chroma 0.003 — a near-black stage with a trace of cool
+        in it. The pass before it used a warm graphite at hue ~70, which is a
+        warm grey in theory and reads as <em>brown</em> in practice: beside
+        <code>--st-working</code>'s green, a deck of twelve tiles picked up an
+        earthy tint. A palette chosen to protect one signal had spent a cast
+        competing with it.
+      </p>
+      <p>
+        Five directions — True Ink, Warm Ember, Graphite, Blue Steel, Deep
+        Petrol — were authored in OKLch, resolved to sRGB, measured and drawn on
+        identical fragments before one was picked. The other four are still in
+        the generator, so reversing this decision means re-running a script
+        rather than reopening an argument.
+      </p>
+
+      <h2>4 · The terminal does not follow the palette</h2>
+      <p>
+        A terminal is a window onto another program. Those six ANSI hues are
+        Claude Code's, not the app's, and overriding them would be the app
+        lying about somebody else's output. What the app owns is the
+        <em>frame</em>: the background, the foreground, the cursor — and
+        <code>brightBlack</code>, which is the terminal's equivalent of
+        <code>--fg-dim</code> and is most of what Claude Code's secondary output
+        is drawn in.
+      </p>
+      <p>
+        The caret is the foreground rather than the accent. That stopped being a
+        choice the moment the accent became light itself: of two names for the
+        same value, only one is true of a terminal cursor.
+      </p>
+
+      <h2>Every colour pair is measured, and the test fails the build</h2>
+      <p>
+        <code>npm run contrast</code> reads the theme rather than quoting it,
+        walks every pair the design claims, and fails if one falls under its
+        threshold. Three pairs deliberately do fall under, and the script
+        documents which three and why — a documented exception is a decision, an
+        undocumented one is a bug nobody has found yet.
+      </p>
+      <p>
+        The diff is where this pays off most visibly. Colour is the third
+        channel there, never the channel: the added and removed bands measure
+        roughly 1.0 against each other, so the literal <code>+</code> and
+        <code>−</code> in their own column do the work. The diff reads for
+        someone who cannot tell the two bands apart, which is a larger number of
+        people than most diff views assume.
+      </p>
+
+      <figure>
+        <img
+          src="/img/pull-requests.webp"
+          width="1600"
+          height="857"
+          alt="A pull request's diff in True Ink: two sticky line-number columns, plus and minus markers in a column of their own, and added and removed bands so close in lightness that the markers carry the meaning."
+          loading="lazy"
+        />
+        <figcaption>
+          The two bands measure ~1.0 against each other. What tells you which
+          line is which is the character, not the colour.
+        </figcaption>
+      </figure>
+
+      <h2>The reasoning, in full</h2>
+      <p>
+        The complete record — the OKLch source, the generator, the five
+        directions on identical fragments, the mockups, the mapping table
+        between the mockups' token names and the app's, and the measurements —
+        is in the repository under
+        <a
+          href={`${SITE.repo}/tree/main/docs/design/true-ink`}
+          rel="noopener">docs/design/true-ink</a
+        >. The mockups need no build step; open them in a browser.
+      </p>
+      <p>
+        This site uses the same tokens, copied rather than imported: a landing
+        page that had drifted a shade from the product it shows would be worse
+        than one that never matched.
+      </p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .swatches {
+    display: grid;
+    gap: 0.5rem;
+    margin: 2rem 0 2.5rem;
+    max-width: var(--measure);
+  }
+  .swatch {
+    display: grid;
+    grid-template-columns: 2.25rem 11rem 5.5rem 1fr;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.55rem 0.75rem;
+    background: var(--bg-island);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-size: 0.9375rem;
+  }
+  .swatch__chip {
+    width: 2.25rem;
+    height: 1.6rem;
+    border-radius: 5px;
+    border: 1px solid var(--line-strong);
+  }
+  .swatch code { background: none; padding: 0; font-size: 0.875rem; }
+  .swatch__hex {
+    font-family: var(--ff-mono);
+    font-size: 0.8125rem;
+    color: var(--fg-dim);
+  }
+  .swatch__note { color: var(--fg-mid); font-size: 0.9375rem; }
+
+  @media (max-width: 640px) {
+    .swatch { grid-template-columns: 2.25rem 1fr; }
+    .swatch__hex, .swatch__note { grid-column: 2; }
+  }
+</style>

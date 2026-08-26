@@ -1,0 +1,20 @@
+{
+  "name": "coworkdeck-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Marketing and documentation site for cowork-deck",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/fetch-releases.mjs && astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.12",
+    "@astrojs/sitemap": "^3.5.1",
+    "@fontsource-variable/ibm-plex-sans": "^5.2.6",
+    "@fontsource-variable/space-grotesk": "^5.2.6",
+    "astro": "^5.14.1"
+  }
+}

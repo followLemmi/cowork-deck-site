@@ -1,0 +1,4 @@
+# Reporting a security issue in cowork-deck
+Contact: https://github.com/followLemmi/cowork-deck/security/advisories/new
+Preferred-Languages: en
+Canonical: https://coworkdeck.dev/.well-known/security.txt

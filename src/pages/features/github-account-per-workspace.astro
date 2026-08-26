@@ -1,0 +1,96 @@
+---
+import Feature from '../../layouts/Feature.astro'
+---
+
+<Feature slug="github-account-per-workspace">
+  <h2>The problem with <code>gh auth switch</code></h2>
+  <p>
+    The GitHub CLI holds one active account per machine. Switching is global: it
+    changes the account for the shell you are in, for every other shell, and for
+    every agent session running anywhere on the box. Work in two repositories
+    under two identities and the routine becomes switch, work, remember to
+    switch back — and the failure mode is a push, a pull request or a signed
+    commit going out as the wrong person.
+  </p>
+  <p>
+    cowork-deck never calls <code>gh auth switch</code>. Instead, an account is
+    a property of a <strong>workspace</strong>.
+  </p>
+
+  <h2>How the binding works</h2>
+  <p>
+    Bind a workspace to a <code>gh</code> account, and every session it starts
+    already has that access in place: <code>gh pr list</code>,
+    <code>git push</code>, the board reading the repository's issues, the pull
+    requests, and the authorship of the commits. Two workspaces run on two
+    accounts <em>at the same time</em>, which is the entire point.
+  </p>
+  <p>
+    Your own terminal outside the app keeps whichever account was active there.
+    Nothing the app does is visible to it.
+  </p>
+  <p>
+    With <code>GH_TOKEN</code> set in the session's environment,
+    <code>gh</code> itself refuses to change account — so a session cannot
+    switch out from under you even if it decides to try.
+  </p>
+
+  <h2>No tokens are stored</h2>
+  <p>
+    The workspace's settings hold the account <em>name</em> and nothing else.
+    The token is read from <code>gh</code>'s own keyring at the moment a session
+    starts, and handed to the child process through environment variables:
+    <code>GH_TOKEN</code>, <code>GIT_AUTHOR_*</code>, and
+    <code>GIT_SSH_COMMAND</code> where it is needed. Nothing is written to disk
+    by this app that <code>gh</code> was not already keeping.
+  </p>
+
+  <h2>What happens when it cannot attach</h2>
+  <p>
+    A process's environment is fixed when it starts, so changing a binding
+    applies to new and restarted sessions. A live session is marked
+    <code>GitHub ⟳</code> rather than quietly continuing on the old identity.
+  </p>
+  <p>
+    If the account could not be attached at all — no <code>gh</code>, logged
+    out, a locked keyring — the session still starts, but with an empty
+    <code>GH_CONFIG_DIR</code>, so <code>gh</code> says “not logged in”
+    honestly instead of silently working as somebody else. The tile carries
+    <code>GitHub ✕</code> and the reason.
+  </p>
+
+  <h2>A shell drawer that tells you who it is</h2>
+  <p>
+    <kbd>Cmd+J</kbd> (<kbd>Ctrl+Shift+J</kbd> elsewhere) opens ordinary
+    interactive shells under the deck, started in the workspace's folder and
+    carrying its account. Before the first prompt, one line names the folder,
+    the branch, the account and the git identity the shell will commit as.
+  </p>
+  <p>
+    That line is not decoration — it is the only reliable way to check.
+    The binding is injected as <code>GIT_AUTHOR_*</code>, which outranks
+    anything in <code>.git/config</code>, so reading the config would tell you
+    the wrong answer.
+  </p>
+
+  <h2>What you need</h2>
+  <p>
+    The <a href="https://cli.github.com/" rel="noopener">GitHub CLI</a>, logged
+    in to the accounts you mean to use. The GitHub screen in the command palette
+    shows what <code>gh</code> reports and helps install it if it is missing —
+    with the install command filled in for your platform, in an editable field,
+    running in an ordinary terminal tile so you can see its output and type your
+    own <code>sudo</code> password.
+  </p>
+</Feature>
+
+<style>
+  kbd {
+    font-family: var(--ff-mono);
+    font-size: 0.8125em;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 0.1em 0.35em;
+    background: var(--bg-inset);
+  }
+</style>

@@ -1,0 +1,74 @@
+---
+import Feature from '../../layouts/Feature.astro'
+---
+
+<Feature slug="settings-sync">
+  <h2>A private repository, not a service</h2>
+  <p>
+    Your workspaces, their GitHub bindings, your scenarios and the journal of
+    what has run can live in a private GitHub repository <em>you</em> own. A
+    second machine then has them without anybody copying files by hand.
+  </p>
+  <p>
+    There is no account to create here, no server that holds your data, and no
+    telemetry. The config directory <em>is</em> the repository — a decision
+    recorded in
+    <a
+      href="https://github.com/followLemmi/cowork-deck/blob/main/docs/adr/0006-the-config-directory-is-the-sync-repository.md"
+      rel="noopener">ADR-0006</a
+    >
+    rather than left implicit.
+  </p>
+  <p>
+    It is off until you switch it on, from <strong>Memory sync…</strong> in the
+    command palette. Switching it on needs <code>gh</code> and a connected
+    account, and offers both halves of the job: create a private repository, or
+    connect the one you already have — which is what every machine after the
+    first does.
+  </p>
+
+  <h2>What travels</h2>
+  <ul>
+    <li>Workspaces and their GitHub bindings.</li>
+    <li>Scenarios, with their placeholders and defaults.</li>
+    <li>The run journal — one file per machine, so two never collide.</li>
+    <li>
+      The memory corpus, which is a place kept for project memory rather than a
+      thing you have yet. See the roadmap.
+    </li>
+  </ul>
+
+  <h2>What does not</h2>
+  <p>
+    Session layout, window state, and terminal drawers stay local. The
+    repository is an <strong>allowlist</strong>, not a filter — and a test
+    asserts the tracked set equals it exactly, so a new setting cannot start
+    travelling by accident.
+  </p>
+  <p>
+    <strong>Absolute paths never travel.</strong> A workspace arriving from
+    another machine has no folder here until you point it at one. And a schedule
+    arrives switched <em>off</em>, so a 03:00 job does not quietly start firing
+    on two machines at once.
+  </p>
+
+  <h2>Conflicts are not resolved for you</h2>
+  <p>
+    If two machines change the same thing, you are told. Notes are prose, and an
+    automatic merge of prose produces a plausible paragraph that nobody wrote —
+    which is worse than a conflict, because it looks finished.
+  </p>
+
+  <h2>Project memory, and where it is</h2>
+  <p>
+    The corpus that travels is the groundwork for semantic search over what
+    earlier sessions actually did and decided — for you, and for agents through
+    an MCP tool of their own. It is
+    <a href="https://github.com/followLemmi/cowork-deck/issues/35" rel="noopener"
+      >the piece being built next</a
+    >, and the embedding model is meant to run on your machine so the index
+    never leaves it. The sidecar exists and is tested; the app around it is the
+    remaining work. Saying so here rather than listing it as a feature is
+    deliberate.
+  </p>
+</Feature>

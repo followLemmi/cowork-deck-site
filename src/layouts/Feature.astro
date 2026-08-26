@@ -1,0 +1,109 @@
+---
+/* The frame every feature page shares: head, breadcrumb, title block, and the
+   cross-links at the foot. The page itself supplies only its prose, which is
+   the part that has to be unique — two pages with the same body are one page
+   as far as a search engine is concerned. */
+import Base from './Base.astro'
+import { featureBySlug, FEATURES } from '../data/features'
+import { breadcrumbs, techArticle } from '../data/schema'
+
+interface Props { slug: string }
+const { slug } = Astro.props
+const f = featureBySlug(slug)
+const others = FEATURES.filter((x) => x.slug !== slug).slice(0, 3)
+---
+
+<Base
+  title={f.pageTitle}
+  description={f.description}
+  image={f.og}
+  imageAlt={f.imageAlt}
+  schema={[
+    techArticle({
+      headline: f.pageTitle,
+      description: f.description,
+      path: `/features/${f.slug}/`,
+      image: f.og,
+    }),
+    breadcrumbs([
+      { name: 'cowork-deck', path: '/' },
+      { name: 'Features', path: '/features/' },
+      { name: f.title, path: `/features/${f.slug}/` },
+    ]),
+  ]}
+>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">cowork-deck</a></li>
+        <li><a href="/features/">Features</a></li>
+        <li aria-current="page">{f.title}</li>
+      </ol>
+    </nav>
+
+    <article class="feature">
+      <header>
+        <h1>{f.pageTitle}</h1>
+        <p class="lede">{f.summary}</p>
+      </header>
+
+      <figure>
+        <img src={f.image} alt={f.imageAlt} width="1600" height="857" loading="eager" />
+      </figure>
+
+      <div class="prose">
+        <slot />
+      </div>
+    </article>
+
+    <aside class="more">
+      <h2>Also in cowork-deck</h2>
+      <div class="grid grid--3">
+        {
+          others.map((o) => (
+            <a class="island card feature-card" href={`/features/${o.slug}/`}>
+              <h3>{o.title}</h3>
+              <p>{o.summary}</p>
+            </a>
+          ))
+        }
+      </div>
+      <p class="more__cta">
+        <a class="btn btn--primary" href="/install/">Download cowork-deck</a>
+      </p>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .crumbs { padding: 1.5rem 0 0; }
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.875rem;
+    color: var(--fg-dim);
+    max-width: none;
+  }
+  .crumbs li { margin: 0; }
+  .crumbs li + li::before { content: '/'; margin-right: 0.5rem; color: var(--line-strong); }
+  .crumbs a { color: var(--fg-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--fg); text-decoration: underline; }
+
+  .feature { padding: 2rem 0 1rem; }
+  .feature header { max-width: var(--measure); }
+  .feature h1 { font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem); }
+
+  .more {
+    border-top: 1px solid var(--line);
+    padding-top: 3rem;
+    margin-top: 3.5rem;
+  }
+  .more h2 { font-size: 1.25rem; margin-bottom: 1.25rem; }
+  .more__cta { margin-top: 2rem; }
+  .feature-card { display: block; text-decoration: none; }
+  .feature-card:hover { border-color: var(--line-strong); }
+</style>
