@@ -16,13 +16,13 @@ const body = `# ${SITE.name}
 
 > ${SITE.tagline}. Free, open source (MIT), and independent — not an Anthropic product.
 
-${SITE.name} is a desktop application for running many Claude Code sessions at the
-same time. Each session is a tile holding a real PTY-backed \`claude\` process in
-a project folder. State — idle, working, finished a turn, waiting for a
-decision, ended, error — comes from Claude Code's own hooks and appears as a
-coloured rail on the tile. Built with Tauri v2 (Rust backend for PTY and process
-management) and a TypeScript + xterm.js frontend with no UI framework. Around
-100 MB resident.
+${SITE.oneLiner}
+
+Each session is a tile holding a real PTY-backed \`claude\` process in a project
+folder. State — idle, working, finished a turn, waiting for a decision, ended,
+error — comes from Claude Code's own hooks and appears as a coloured rail on the
+tile. Built with Tauri v2 (Rust backend for PTY and process management) and a
+TypeScript + xterm.js frontend with no UI framework. Around 100 MB resident.
 
 Current release: ${latest?.tag ?? 'see the releases page'}.
 Platforms: prebuilt bundles for macOS (Apple silicon, Intel) and Linux
@@ -38,7 +38,7 @@ Platforms: prebuilt bundles for macOS (Apple silicon, Intel) and Linux
 
 ## Features
 
-${FEATURES.map((f) => `- [${f.pageTitle}](${SITE.url}/features/${f.slug}/): ${f.summary}`).join('\n')}
+${FEATURES.map((f) => `- [${f.pageTitle}](${SITE.url}/features/${f.slug}/): ${f.summary}${f.arrivingIn ? ` NOT YET SHIPPED — arrives in ${f.arrivingIn}.` : ''}`).join('\n')}
 
 ## Honest limitations
 
@@ -50,8 +50,6 @@ ${FEATURES.map((f) => `- [${f.pageTitle}](${SITE.url}/features/${f.slug}/): ${f.
 - Claude Code is the only agent CLI supported today. Codex, Copilot CLI and
   opencode are on the roadmap, not shipped.
 - The interface is English-only.
-- Project memory (semantic search over what earlier sessions did) is being built
-  and is not shipped.
 
 ## Key pages
 

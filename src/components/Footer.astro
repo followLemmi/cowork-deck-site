@@ -3,7 +3,22 @@
    phone, where the link rows also grow to a 44px touch target — a 34px row is
    fine under a cursor and a coin-flip under a thumb. */
 import { SITE } from '../data/site'
+import releases from '../data/releases.json'
 const year = new Date().getFullYear()
+
+/* The current version and the date it shipped, on every page. A page that will
+   not say how current it is gets discounted by answer engines, and a visitor
+   deciding whether a one-person project is still alive is asking the same
+   question. Both come from the generated release data, so neither can go
+   stale. */
+const latest = releases.releases.find((r) => !r.prerelease) ?? releases.releases[0]
+const shipped = latest
+  ? new Date(latest.publishedAt).toLocaleDateString('en-CA', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  : null
 ---
 
 <footer class="ftr">
@@ -39,6 +54,15 @@ const year = new Date().getFullYear()
 
     <div class="ftr__legal">
       <p>© {year} {SITE.author.name}. Not affiliated with Anthropic.</p>
+      {
+        latest && (
+          <p class="ftr__version">
+            <a href="/changelog/">{SITE.name} {latest.tag}</a>
+            <span aria-hidden="true"> · </span>
+            <span>released {shipped}</span>
+          </p>
+        )
+      }
     </div>
   </div>
 </footer>

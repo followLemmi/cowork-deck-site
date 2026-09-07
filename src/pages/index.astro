@@ -42,8 +42,9 @@ const rest = FEATURES.filter((f) => f.slug !== LEAD)
       <p class="eyebrow">Free · Open source · macOS and Linux</p>
       <h1>Run many Claude&nbsp;Code sessions at once.</h1>
       <p class="lede">
-        cowork-deck is a desktop app that gives every session a tile with a real
-        terminal in it, and answers one question at a glance:
+        cowork-deck is a desktop app for running Claude&nbsp;Code sessions in
+        parallel. Every session gets a tile with a real terminal in it, and the
+        window answers one question at a glance:
         <em>which of these needs me?</em>
       </p>
 
@@ -175,7 +176,7 @@ const rest = FEATURES.filter((f) => f.slug !== LEAD)
     <div class="wrap">
       <div class="section__head">
         <p class="eyebrow">What it does</p>
-        <h2>Six things a terminal cannot do for you.</h2>
+        <h2>{FEATURES.length} things a terminal cannot do for you.</h2>
       </div>
 
       <div class="lead-feature">
@@ -205,7 +206,10 @@ const rest = FEATURES.filter((f) => f.slug !== LEAD)
         {rest.map((f) => (
           <a class="fitem" href={`/features/${f.slug}/`}>
             <div>
-              <h3>{f.title}</h3>
+              <h3>
+                {f.title}
+                {f.arrivingIn && <span class="tag">{f.arrivingIn}</span>}
+              </h3>
               <p>{f.summary}</p>
             </div>
             <span class="fitem__go">Read →</span>

@@ -14,7 +14,7 @@ const others = FEATURES.filter((x) => x.slug !== slug).slice(0, 3)
 ---
 
 <Base
-  title={f.pageTitle}
+  title={f.titleTag ?? f.pageTitle}
   description={f.description}
   image={f.og}
   imageAlt={f.imageAlt}
@@ -43,19 +43,26 @@ const others = FEATURES.filter((x) => x.slug !== slug).slice(0, 3)
 
     <article>
       <div class="phead phead--crumbed">
+        {f.arrivingIn && <p class="eyebrow eyebrow--soon">Arriving in {f.arrivingIn}</p>}
         <h1 class="h1--page">{f.pageTitle}</h1>
         <p class="lede">{f.summary}</p>
       </div>
 
-      <figure class="shot bleed" style="margin-top: 0">
-        <img
-          src={f.image}
-          alt={f.imageAlt}
-          width={f.width}
-          height={f.height}
-          fetchpriority="high"
-        />
-      </figure>
+      {
+        /* A feature written before its release has no screenshot, and an
+           invented one would be worse than none. */
+        f.image && (
+          <figure class="shot bleed" style="margin-top: 0">
+            <img
+              src={f.image}
+              alt={f.imageAlt}
+              width={f.width}
+              height={f.height}
+              fetchpriority="high"
+            />
+          </figure>
+        )
+      }
 
       <div class="prose" style="margin-top: clamp(2.5rem, 5vw, 3.5rem)">
         <slot />
