@@ -4,6 +4,7 @@ import { SITE } from '../../data/site'
 import { breadcrumbs, person } from '../../data/schema'
 import { renderMarkdown, firstParagraph } from '../../data/markdown'
 import data from '../../data/releases.json'
+import { isUndocumented } from '../../data/releases'
 
 export function getStaticPaths() {
   return data.releases.map((release) => ({
@@ -40,6 +41,7 @@ const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`
   title={`cowork-deck ${release.tag} release notes`}
   description={metaDescription}
   publishedTime={release.publishedAt}
+  noindex={isUndocumented(release.tag)}
   schema={[
     {
       '@context': 'https://schema.org',

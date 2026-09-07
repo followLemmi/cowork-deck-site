@@ -33,8 +33,9 @@ import Feature from '../../layouts/Feature.astro'
     <li>Scenarios, with their placeholders and defaults.</li>
     <li>The run journal — one file per machine, so two never collide.</li>
     <li>
-      The memory corpus, which is a place kept for project memory rather than a
-      thing you have yet. See the roadmap.
+      The memory corpus behind
+      <a href="/features/project-memory/">project memory</a>, so an agent on the
+      second machine can search what sessions on the first one decided.
     </li>
   </ul>
 
@@ -61,14 +62,11 @@ import Feature from '../../layouts/Feature.astro'
 
   <h2>Project memory, and where it is</h2>
   <p>
-    The corpus that travels is the groundwork for semantic search over what
-    earlier sessions actually did and decided — for you, and for agents through
-    an MCP tool of their own. It is
-    <a href="https://github.com/followLemmi/cowork-deck/issues/35" rel="noopener"
-      >the piece being built next</a
-    >, and the embedding model is meant to run on your machine so the index
-    never leaves it. The sidecar exists and is tested; the app around it is the
-    remaining work. Saying so here rather than listing it as a feature is
-    deliberate.
+    The corpus that travels is the one behind
+    <a href="/features/project-memory/">project memory</a> — semantic search over
+    what earlier sessions actually did and decided, for you and for agents
+    through an MCP tool of their own. The embedding model runs on your machine, so
+    the index never leaves it, and what moves between machines moves through a
+    repository you own rather than through anybody's cloud.
   </p>
 </Feature>

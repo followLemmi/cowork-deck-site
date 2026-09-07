@@ -11,6 +11,13 @@
  *                          answer engines lift from most readily.
  */
 import { SITE } from './site'
+import releases from './releases.json'
+
+/* The newest stable release, for `softwareVersion` and `dateModified`. Answer
+   engines and rich results both discount a page that will not say how current
+   it is, and a hand-written version here would go stale on the next tag. */
+const latest =
+  releases.releases.find((r) => !r.prerelease) ?? releases.releases[0]
 
 export const person = {
   '@type': 'Person',
@@ -23,9 +30,27 @@ export const softwareApplication = {
   '@type': 'SoftwareApplication',
   '@id': `${SITE.url}/#app`,
   name: SITE.name,
-  alternateName: 'cowork deck',
+  /* Every spelling a person might type or hear. One slot, machine-readable,
+     consumed as identity rather than as prose — which is what makes it the
+     right place for the variants and the wrong place for an explanation. */
+  alternateName: ['cowork deck', 'coworkdeck', 'cowork-deck app'],
+  /* The assertion that has to travel with the name, because the name collides
+     with Anthropic's own product. Google's result for "cowork deck" is
+     claude.com with "polished deck" in bold: Claude Cowork produces decks, so
+     the collision is semantic and not merely a similar spelling. This property
+     exists for exactly this case. */
+  disambiguatingDescription:
+    'cowork-deck is an independent, MIT-licensed desktop application that runs the Claude Code CLI in many parallel sessions. It is not Claude Cowork, it is not a product of Anthropic, and it is not affiliated with Anthropic.',
+  /* Identifiers that already resolve to this project. For a name with no
+     established prior, anchoring to stable URLs is the only thing that makes
+     the string resolvable at all. */
+  sameAs: [
+    SITE.repo,
+    SITE.author.url,
+    SITE.releases,
+  ],
   applicationCategory: 'DeveloperApplication',
-  applicationSubCategory: 'Terminal multiplexer for AI coding agents',
+  applicationSubCategory: 'Parallel session manager for AI coding agents',
   operatingSystem: 'macOS, Linux, Windows (from source)',
   description: SITE.description,
   url: SITE.url,
@@ -34,6 +59,8 @@ export const softwareApplication = {
   softwareHelp: `${SITE.url}/faq/`,
   releaseNotes: `${SITE.url}/changelog/`,
   license: SITE.licenseUrl,
+  softwareVersion: latest?.tag?.replace(/^v/, ''),
+  dateModified: latest?.publishedAt,
   isAccessibleForFree: true,
   offers: {
     '@type': 'Offer',
@@ -56,6 +83,7 @@ export const softwareApplication = {
     'Saved prompts as scenarios, with schedules',
     'A run journal of every session',
     'Settings that sync to your own private repository',
+    'Project memory: local semantic search over what earlier sessions decided, readable by agents over MCP',
   ],
   softwareRequirements: 'Claude Code, and the GitHub CLI for GitHub features',
   programmingLanguage: ['Rust', 'TypeScript'],

@@ -12,22 +12,37 @@ export type FeatureMeta = {
   slug: string
   /* Card title on the grid. */
   title: string
-  /* <title> for the feature's own page. Longer and more literal, because it
-     competes in a search result rather than on a grid. */
+  /* The page's <h1>. Longer and more literal than the card title, and it is
+     the sentence the page is really about — the trailing clause is usually the
+     differentiator, so it does not get trimmed for anyone's convenience. */
   pageTitle: string
+  /* The <title>, when `pageTitle` plus the product name would run past the
+     ~60 characters a search result shows. A heading and a search result have
+     different jobs: the heading can afford the clause that explains, the
+     result cannot, and truncating the heading to fit the result loses exactly
+     the words worth ranking for. Omit it and `pageTitle` is used. */
+  titleTag?: string
   /* <meta name="description">, under 155 characters. */
   description: string
   /* One sentence on the grid card. */
   summary: string
   query: string
-  image: string
+  /* Absent on a feature that has no screenshot yet. */
+  image?: string
   /* Intrinsic size, so the browser reserves the right box before the image
      arrives. One screenshot is a different shape from the others; a shared
      constant here would be a layout shift on that one page. */
-  width: number
-  height: number
-  imageAlt: string
-  og: string
+  width?: number
+  height?: number
+  imageAlt?: string
+  og?: string
+  /* The release this feature arrives in, on a feature described here before it
+     is in a published build. The grid cards, the feature page's own eyebrow and
+     the llms.txt listing all read this one field and mark themselves, so
+     shipping the feature is a one-line change. Prose that has to be edited by
+     hand — the FAQ's limitations answer — is not covered by it, and the release
+     gate in scripts/check-seo.mjs is what stops that prose shipping early. */
+  arrivingIn?: string
 }
 
 export const FEATURES: FeatureMeta[] = [
@@ -51,6 +66,7 @@ export const FEATURES: FeatureMeta[] = [
     slug: 'github-account-per-workspace',
     title: 'A GitHub account per project',
     pageTitle: 'Two GitHub accounts at the same time, one per workspace',
+    titleTag: 'Two GitHub accounts on one machine',
     description:
       'Bind each workspace to a gh account. Sessions in two projects push, open pull requests and sign commits as two different people — with no account switching.',
     summary:
@@ -67,6 +83,7 @@ export const FEATURES: FeatureMeta[] = [
     slug: 'task-board',
     title: 'A board that starts sessions',
     pageTitle: 'A task board for Claude Code — markdown cards or GitHub issues',
+    titleTag: 'A task board for Claude Code sessions',
     description:
       'Every workspace gets a board, from markdown files in your repository or from the repository’s own GitHub issues. Press play on a card and it becomes a session.',
     summary:
@@ -83,6 +100,7 @@ export const FEATURES: FeatureMeta[] = [
     slug: 'github-issues-and-pull-requests',
     title: 'Issues and pull requests',
     pageTitle: 'GitHub issues and pull requests, without leaving the deck',
+    titleTag: 'Review GitHub pull requests without a browser',
     description:
       'Read a repository’s issues as documents, open one as a session on its own branch, and review pull requests with their checks and their diff in the same window.',
     summary:
@@ -115,6 +133,7 @@ export const FEATURES: FeatureMeta[] = [
     slug: 'settings-sync',
     title: 'The same setup everywhere',
     pageTitle: 'Sync your setup between machines through your own private repo',
+    titleTag: 'Sync your settings between machines',
     description:
       'Workspaces, bindings, scenarios and the run journal live in a private GitHub repository that is yours. No account, no cloud, no telemetry.',
     summary:
@@ -126,6 +145,17 @@ export const FEATURES: FeatureMeta[] = [
     imageAlt:
       'The board reading a repository’s GitHub issues, filtered by state and label, each row deep enough to show an excerpt of the body.',
     og: '/og/issues.png',
+  },
+  {
+    slug: 'project-memory',
+    title: 'Memory that fills itself',
+    pageTitle: 'Project memory: semantic search over what earlier sessions did',
+    titleTag: 'Project memory for Claude Code',
+    description:
+      'Semantic search over what earlier Claude Code sessions did and decided. The corpus fills itself, the model runs locally, and agents read it over MCP.',
+    summary:
+      'A session writes its own summary when it closes, so the corpus grows without anyone keeping notes.',
+    query: 'how to give Claude Code memory of previous sessions',
   },
 ]
 

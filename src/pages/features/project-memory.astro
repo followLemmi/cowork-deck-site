@@ -1,0 +1,88 @@
+---
+import Feature from '../../layouts/Feature.astro'
+---
+
+<Feature slug="project-memory">
+  <h2>Why does a fresh Claude Code session know nothing?</h2>
+  <p>
+    Because each session starts from an empty context. Everything an earlier
+    session worked out — the reason a library was rejected, the shape of a schema
+    that took an afternoon to settle, the approach already tried and abandoned —
+    leaves with the process. The next session re-derives it, or asks you to, or
+    quietly repeats the mistake.
+  </p>
+  <p>
+    Running twelve sessions at once makes that worse rather than better. Twelve
+    agents each learning the project for the first time is twelve times the same
+    explanation.
+  </p>
+
+  <h2>What project memory does</h2>
+  <p>
+    It is semantic search over what earlier sessions actually did and decided —
+    for you, and for the agents through an
+    <abbr title="Model Context Protocol">MCP</abbr> tool of their own. An agent
+    that can ask <em>has anyone here tried this before?</em> gets an answer from
+    the project's own history instead of guessing, and you get the same answer
+    from the same corpus without reading a journal.
+  </p>
+
+  <h2>Who writes the corpus?</h2>
+  <p>
+    The sessions do. <strong>A session writes its own summary when it
+    closes</strong>, so the corpus fills itself and nothing depends on anyone
+    keeping notes.
+  </p>
+  <p>
+    That is the design decision the rest follows from: a memory that needs
+    discipline to maintain is a memory that is empty after two weeks. Nobody
+    tags anything, nobody remembers to write it down, and there is no step to
+    forget.
+  </p>
+
+  <h2>Where does the index live?</h2>
+  <p>
+    On your machine. <strong>The embedding model runs locally and the index never
+    leaves it</strong> — the same rule as the rest of the app, which adds no
+    account, key or subscription of its own and sends nothing anywhere.
+  </p>
+  <p>
+    The corpus is part of what <a href="/features/settings-sync/">settings
+    sync</a> carries, so it follows you to another machine through a private
+    repository you own rather than through anybody's cloud.
+  </p>
+
+  <h2>How it is built</h2>
+  <p>
+    The engine is a separate Rust crate — <code>crates/cowork-memory</code> —
+    built and tested on its own rather than inside the app. Its tests run against
+    a deterministic fake embedder so they are reproducible in CI; the ones that
+    need the real model are marked <code>#[ignore]</code> and run deliberately.
+  </p>
+  <p>
+    Keeping it a sidecar is what makes the embedding model swappable and the
+    index inspectable without the app running. It is the piece the deck was
+    missing rather than a piece it improves, and it is tracked from
+    <a
+      href="https://github.com/followLemmi/cowork-deck/issues/35"
+      rel="noopener">issue #35</a
+    >.
+  </p>
+
+  <h2>What it does not do</h2>
+  <p>
+    It does not read your code. The corpus is made of session summaries — what
+    was attempted and what was concluded — not of the repository, which the agent
+    can already read for itself. It is memory of the work, not an index of the
+    files.
+  </p>
+  <p>
+    And it starts empty. The first session in a project has nothing to search,
+    because nothing has closed yet; the corpus is worth something after a week of
+    ordinary use, not on the first afternoon.
+  </p>
+</Feature>
+
+<style>
+  abbr { text-decoration: underline dotted; cursor: help; }
+</style>

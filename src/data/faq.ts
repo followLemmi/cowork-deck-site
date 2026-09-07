@@ -28,7 +28,7 @@ export const FAQ: QA[] = [
   {
     group: 'What it is',
     q: 'Is cowork-deck made by Anthropic?',
-    a: 'No. cowork-deck is an independent open-source project and is not affiliated with, endorsed by, or supported by Anthropic. It drives the Claude Code CLI the same way a person at a terminal would.',
+    a: 'No. cowork-deck is an independent open-source project and is not affiliated with, endorsed by, or supported by Anthropic. It is also a different thing from Claude Cowork, which is Anthropic\u2019s own product: cowork-deck runs the Claude Code CLI already installed on your machine, in many parallel sessions, and adds no account, key or subscription of its own.',
   },
 
   // --- Cost and requirements -------------------------------------------
@@ -79,6 +79,11 @@ export const FAQ: QA[] = [
     group: 'How it compares',
     q: 'Why not just use Claude Code’s own subagents or git worktrees?',
     a: 'Those solve a different problem. Subagents run inside one session under one conversation; worktrees give you separate checkouts but no view over them. cowork-deck is the layer above: many independent top-level sessions, in different projects, under different GitHub accounts, with their state visible at once. It uses worktrees itself when starting a session on an issue or a pull request.',
+  },
+  {
+    group: 'How it compares',
+    q: 'How does cowork-deck compare to Conductor, Crystal, Claude Squad or Vibe Kanban?',
+    a: 'Those tools mostly give each agent its own git worktree inside a single repository. cowork-deck works one level up: a workspace is a project folder, several projects run side by side in one window, and each workspace is bound to its own GitHub account \u2014 which, as of September 2026, no other tool in the category does. What some of them have and cowork-deck does not: a published Windows bundle, and sessions that keep running once the app is closed.',
   },
   {
     group: 'How it compares',
@@ -134,6 +139,17 @@ export const FAQ: QA[] = [
     a: 'Quitting names the sessions that still have something running and waits for you. What is killed is the whole process session, so a build started inside a shell dies with it rather than outliving the app. Restarting resumes the conversation with claude --resume, and yesterday’s tiles come back on the next launch.',
   },
 
+  {
+    group: 'How it behaves',
+    q: 'Can Claude Code remember what earlier sessions did?',
+    a: 'Not on its own \u2014 every Claude Code session starts from an empty context, so what an earlier one worked out leaves with the process. cowork-deck gives it project memory: semantic search over what earlier sessions did and decided, for you and for the agents through an MCP tool of their own. A session writes its own summary when it closes, so the corpus fills itself. The embedding model runs on your machine and the index never leaves it.',
+    html: 'Not on its own \u2014 every Claude Code session starts from an empty context, so what an earlier one worked out leaves with the process. cowork-deck gives it <a href="/features/project-memory/">project memory</a>: semantic search over what earlier sessions did and decided, for you and for the agents through an MCP tool of their own. A session writes its own summary when it closes, so the corpus fills itself. The embedding model runs on your machine and the index never leaves it.',
+  },
+  {
+    group: 'How it behaves',
+    q: 'What are the limitations of cowork-deck?',
+    a: 'Sessions are children of the app, so there is no detached mode and the scheduler only fires while the window is open. There is no published Windows bundle \u2014 macOS and Linux ship prebuilt, Windows builds from source. The macOS bundle is not notarized, so Gatekeeper reports it as damaged until the quarantine flag is cleared. Claude Code is the only agent CLI supported today. The interface is English-only.',
+  },
   // --- The project ------------------------------------------------------
   {
     group: 'The project',

@@ -4,9 +4,51 @@ import { FEATURES } from '../../data/features'
 import { SITE } from '../../data/site'
 import { breadcrumbs } from '../../data/schema'
 
-/* One screenshot at the top and six rows under it, rather than six cards. Six
-   cards say "these are six of the same thing", and they are not: they are six
-   different answers to six different questions. */
+/* The decision table. The left column is the only new writing here: the name and
+   the URL come from FEATURES, so a feature cannot be called one thing on its
+   card and another thing in the table that sends people to it. */
+const WANTS: { want: string; slug: string }[] = [
+  {
+    want: 'run a dozen agents and see at a glance which one is stuck',
+    slug: 'multiple-claude-code-sessions',
+  },
+  {
+    want: 'push from work and personal GitHub accounts on one machine, with no <code>gh auth switch</code>',
+    slug: 'github-account-per-workspace',
+  },
+  {
+    want: 'keep a backlog that outlives any tool — markdown cards committed to your own repository',
+    slug: 'task-board',
+  },
+  {
+    want: 'read issues and review pull requests, with their checks and diffs, without opening a browser',
+    slug: 'github-issues-and-pull-requests',
+  },
+  {
+    want: 'save a prompt under a name and run it hourly, daily or weekly',
+    slug: 'scenarios-and-schedules',
+  },
+  {
+    want: 'carry your workspaces and scenarios to the next machine without a vendor account',
+    slug: 'settings-sync',
+  },
+  {
+    want: 'ask what an earlier session already tried, instead of re-explaining the project to a fresh agent',
+    slug: 'project-memory',
+  },
+]
+
+const decisions = WANTS.map((w) => {
+  const feature = FEATURES.find((f) => f.slug === w.slug)
+  if (!feature) throw new Error(`decision table points at no feature: ${w.slug}`)
+  return { ...w, feature }
+})
+
+/* One screenshot at the top and one row per feature under it, rather than a
+   grid of cards. Cards say "these are several of the same thing", and they are
+   not: they are several different answers to several different questions.
+   The count is never written out in prose here — it was wrong the moment a
+   seventh feature arrived, and it would be wrong again. */
 const shot = FEATURES.find((f) => f.slug === 'multiple-claude-code-sessions')!
 ---
 
@@ -25,9 +67,8 @@ const shot = FEATURES.find((f) => f.slug === 'multiple-claude-code-sessions')!
       <p class="eyebrow">Features</p>
       <h1 class="h1--page">Everything the deck does</h1>
       <p class="lede">
-        Six capabilities, each one a thing a terminal, a tab strip or a
-        multiplexer cannot do for you — because none of them knows what an agent
-        session is.
+        Each one a thing a terminal, a tab strip or a multiplexer cannot do for
+        you — because none of them knows what an agent session is.
       </p>
     </div>
   </div>
@@ -48,17 +89,102 @@ const shot = FEATURES.find((f) => f.slug === 'multiple-claude-code-sessions')!
         </figcaption>
       </figure>
 
+      <div class="fintro">
+        <h2>What can cowork-deck do that a terminal cannot?</h2>
+        <p>
+          It knows what an agent session is. A terminal gives you a process and a
+          scrollback; a tab strip gives you titles. Neither can tell you that the
+          session in the fourth tile stopped to ask a question four minutes ago,
+          because neither has any idea that a question was asked. cowork-deck
+          reads Claude&nbsp;Code's own hooks, so the state on every tile is the
+          state the agent reported — not a guess from parsing output.
+        </p>
+        <p>
+          The pages below are different answers to different questions. Each one
+          names the problem it solves in its first screen, so you can decide from
+          the row whether the page is for you.
+        </p>
+      </div>
+
       <div class="flist" style="margin-top: clamp(2.5rem, 5vw, 3.5rem)">
         {FEATURES.map((f) => (
           <a class="fitem" href={`/features/${f.slug}/`}>
             <div>
-              <h2>{f.title}</h2>
+              <h2>
+                {f.title}
+                {f.arrivingIn && <span class="tag">{f.arrivingIn}</span>}
+              </h2>
               <p>{f.summary}</p>
             </div>
             <span class="fitem__go">Read →</span>
           </a>
         ))}
       </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Which of these do you actually need?</h2>
+      <p class="lede lede--tight">
+        Most people arrive for one of these and stay for a second one they did not
+        know existed.
+      </p>
+
+      <div class="tblwrap">
+        <table class="dtbl">
+          <thead>
+            <tr><th scope="col">If you want to…</th><th scope="col">Read</th></tr>
+          </thead>
+          <tbody>
+            {
+              decisions.map((d) => (
+                <tr>
+                  <td set:html={d.want} />
+                  <td>
+                    <a href={`/features/${d.feature.slug}/`}>{d.feature.title}</a>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Where the deck stops</h2>
+      <p class="lede lede--tight">
+        The list that decides it for some people, so it belongs on the features
+        page rather than three clicks away.
+      </p>
+      <ul class="limits">
+        <li>
+          <b>No detached mode.</b> Sessions are children of the app. The scheduler
+          only fires while the window is open, and missed runs catch up once on the
+          next launch. If you need work to continue after you close the lid, this
+          is the wrong tool.
+        </li>
+        <li>
+          <b>No published Windows bundle.</b> macOS and Linux ship prebuilt.
+          Windows builds from source.
+        </li>
+        <li>
+          <b>The macOS bundle is not notarized</b>, so Gatekeeper calls it
+          damaged. <code>xattr -cr /Applications/cowork-deck.app</code> clears the
+          flag, and the <a href="/faq/">FAQ</a> explains why.
+        </li>
+        <li>
+          <b>Claude Code only.</b> Codex, Copilot CLI and opencode are on the
+          roadmap, not shipped.
+        </li>
+        <li>
+          <b>English-only interface</b>, and one machine at a time: what syncs
+          between machines is your setup, not a live session.
+        </li>
+      </ul>
     </div>
   </section>
 

@@ -11,9 +11,19 @@ export const SITE = {
   /* The one-line answer to "what is this", reused as the default meta
      description and as the JSON-LD `description`. Kept under 155 characters so
      search results do not truncate it. */
-  tagline: 'A desktop deck for running many Claude Code sessions at once',
+  tagline: 'A desktop deck for running Claude Code sessions in parallel',
   description:
-    'Run many Claude Code sessions side by side in one window. Every tile is a real terminal with live state, and every workspace gets its own GitHub account.',
+    'Run Claude Code sessions in parallel in one window. Every tile is a real terminal with live state, and every workspace gets its own GitHub account.',
+  /* The one sentence that names the product and its category together, used
+     verbatim everywhere it fits and never reworded.
+
+     The reason it is a constant rather than a style choice: a model learns what
+     a name means from repeated co-occurrence of that exact string with a stable
+     descriptor. Varying the phrasing for freshness splits the association
+     across several weaker ones. Anthropic ships a product called Claude Cowork,
+     so this name starts from a deficit and cannot afford the split. */
+  oneLiner:
+    'cowork-deck is a desktop app for running many Claude Code sessions in parallel.',
   repo: 'https://github.com/followLemmi/cowork-deck',
   releases: 'https://github.com/followLemmi/cowork-deck/releases',
   issues: 'https://github.com/followLemmi/cowork-deck/issues',

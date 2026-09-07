@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config'
 import sitemap from '@astrojs/sitemap'
+import { UNDOCUMENTED_TAGS } from './src/data/releases'
 
 /* The canonical origin. Every absolute URL on the site — canonical tags, Open
    Graph images, the sitemap, the RSS feed, the JSON-LD — is derived from this
@@ -13,8 +14,13 @@ export default defineConfig({
   build: { format: 'directory' },
   integrations: [
     sitemap({
-      // Pages that exist for machines, not for search results.
-      filter: (page) => !page.includes('/404'),
+      // Pages that exist for machines, not for search results — plus the
+      // release pages that carry no notes of their own and are marked
+      // noindex, because a sitemap asking for a page the page itself
+      // declines is a contradiction a crawler has to resolve.
+      filter: (page) =>
+        !page.includes('/404') &&
+        !UNDOCUMENTED_TAGS.some((tag) => page.includes(`/changelog/${tag}/`)),
       changefreq: 'weekly',
       lastmod: new Date(),
     }),

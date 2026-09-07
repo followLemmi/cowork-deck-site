@@ -17,6 +17,74 @@ function walk(dir) {
   )
 }
 
+/* A page may not claim a feature the published release does not have.
+ *
+ * The site is deployed from `main`, and a feature page is often written before
+ * the release it describes. Writing it early is fine; deploying it early is a
+ * lie to every visitor and to every crawler that reads the structured data. The
+ * ordering was previously a thing somebody had to remember, so this asserts it
+ * instead — the release data is regenerated from GitHub on every build, so this
+ * gate cannot pass until the release actually exists.
+ *
+ * To describe a feature before its release, give it `arrivingIn` in
+ * `features.ts` and keep it out of the JSON-LD `featureList`; every surface then
+ * marks it unshipped on its own. */
+const GATED_FEATURES = [
+  { needle: 'project memory', since: '0.6.0' },
+]
+
+function parseVersion(tag) {
+  const m = /^v?(\d+)\.(\d+)\.(\d+)/.exec(tag ?? '')
+  return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : null
+}
+
+function atLeast(tag, min) {
+  const a = parseVersion(tag)
+  const b = parseVersion(min)
+  if (!a || !b) return false
+  for (let i = 0; i < 3; i++) {
+    if (a[i] > b[i]) return true
+    if (a[i] < b[i]) return false
+  }
+  return true
+}
+
+function checkReleaseGate() {
+  const path = 'src/data/releases.json'
+  if (!existsSync(path)) {
+    problems.push(`${path} is missing, so the release gate cannot run`)
+    return
+  }
+  const data = JSON.parse(readFileSync(path, 'utf8'))
+  const latest = data.releases?.find((r) => !r.prerelease) ?? data.releases?.[0]
+
+  /* The claim that matters is the machine-readable one: featureList describes
+     the application as it is now, not as it is planned. */
+  const home = join(DIST, 'index.html')
+  if (!existsSync(home)) return
+  const html = readFileSync(home, 'utf8')
+  const nodes = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)]
+  const claimed = nodes
+    .flatMap((m) => {
+      try {
+        return JSON.parse(m[1]).featureList ?? []
+      } catch {
+        return []
+      }
+    })
+    .map((x) => String(x).toLowerCase())
+
+  for (const { needle, since } of GATED_FEATURES) {
+    if (!claimed.some((c) => c.includes(needle))) continue
+    if (!atLeast(latest?.tag, since)) {
+      problems.push(
+        `the site claims "${needle}" but the newest release is ${latest?.tag ?? 'unknown'}; ` +
+          `it ships in v${since}. Do not deploy this until that release is out.`,
+      )
+    }
+  }
+}
+
 const files = walk(DIST)
 const pages = files.filter((f) => f.endsWith('.html'))
 const descriptions = new Map()
@@ -35,6 +103,11 @@ for (const file of pages) {
   if (!desc) problems.push(`${route}: no meta description`)
   if (!canonical && !isError) problems.push(`${route}: no canonical link`)
   if (desc && desc.length > 165) problems.push(`${route}: description is ${desc.length} characters; over 165 gets truncated`)
+  /* Google gives a title about 60 characters before it cuts it, and the layout
+     appends the product name — so a long `pageTitle` overflows without anything
+     looking wrong in a browser tab. Exactly the class of mistake this gate is
+     for. */
+  if (title && title.length > 60) problems.push(`${route}: <title> is ${title.length} characters; over 60 gets truncated`)
 
   /* Two pages with the same description are two pages competing for the same
      result, and Google picks one. */
@@ -87,6 +160,8 @@ for (const asset of files.filter((f) => ['.png', '.webp', '.jpg', '.gif'].includ
   const kb = statSync(asset).size / 1024
   if (kb > 400) problems.push(`${asset.slice(DIST.length)} is ${kb.toFixed(0)} KB; over 400 KB for one image`)
 }
+
+checkReleaseGate()
 
 console.log(`checked ${pages.length} pages`)
 if (problems.length) {
